@@ -8,5 +8,8 @@ module.exports = tourism({
   },
   test: {
     server: [ 'test/**/*.js' ]
+  },
+  shell: {
+    build: 'docker build -t thenativeweb/crew-test .'
   }
 });
