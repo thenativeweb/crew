@@ -21,6 +21,7 @@
     "grunt": "0.4.5",
     "knockat": "0.0.1",
     "node-assertthat": "0.2.2",
+    "request": "2.49.0",
     "tourism": "0.9.4"
   },
   "repository": {

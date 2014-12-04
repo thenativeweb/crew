@@ -1,9 +1,12 @@
 'use strict';
 
-var childProcess = require('child_process');
+var childProcess = require('child_process'),
+    path = require('path'),
+    url = require('url');
 
 var assert = require('node-assertthat'),
-    Knock = require('knockat');
+    Knock = require('knockat'),
+    request = require('request');
 
 var DockWorker = require('../lib/DockWorker'),
     settings = require('./settings');
@@ -221,11 +224,145 @@ suite('DockWorker', function () {
     });
 
     suite('environment variables', function () {
-      // ...
+      test('sets a single environment variable.', function (done) {
+        dockWorker.startContainer({
+          image: settings.image,
+          name: settings.containerName,
+          env: {
+            port1: 5000
+          },
+          ports: [
+            { container: 5000, host: 5000 }
+          ]
+        }, function (err, id) {
+          var knock;
+          assert.that(err, is.null());
+
+          knock = new Knock();
+          knock.at(settings.host, 5000, function (err) {
+            assert.that(err, is.null());
+
+            childProcess.exec('docker kill ' + id + ' && docker rm ' + id, function (childProcessErr) {
+              assert.that(childProcessErr, is.null());
+              done();
+            });
+          });
+        });
+      });
+
+      test('sets multiple environment variables.', function (done) {
+        dockWorker.startContainer({
+          image: settings.image,
+          name: settings.containerName,
+          env: {
+            port1: 5000,
+            port2: 6000
+          },
+          ports: [
+            { container: 5000, host: 5000 },
+            { container: 6000, host: 6000 }
+          ]
+        }, function (err, id) {
+          var knock;
+          assert.that(err, is.null());
+
+          knock = new Knock();
+          knock.at(settings.host, 5000, function (err) {
+            assert.that(err, is.null());
+
+            knock = new Knock();
+            knock.at(settings.host, 6000, function (err) {
+              assert.that(err, is.null());
+
+              childProcess.exec('docker kill ' + id + ' && docker rm ' + id, function (childProcessErr) {
+                assert.that(childProcessErr, is.null());
+                done();
+              });
+            });
+          });
+        });
+      });
     });
 
     suite('volumes', function () {
-      // ...
+      test('mounts a single volume.', function (done) {
+        dockWorker.startContainer({
+          image: settings.image,
+          name: settings.containerName,
+          ports: [
+            { container: 3000, host: 3000 }
+          ],
+          volumes: [
+            { container: '/data1', host: path.join(__dirname, 'testBox', 'toBeMounted') }
+          ]
+        }, function (err, id) {
+          assert.that(err, is.null());
+
+          setTimeout(function () {
+            request.get(url.format({
+              protocol: 'http',
+              hostname: settings.host,
+              port: 3000,
+              pathname: '/'
+            }), function (err, res, body) {
+              assert.that(err, is.null());
+              assert.that(res.statusCode, is.equalTo(200));
+              assert.that(body, is.equalTo('foobar\n'));
+
+              childProcess.exec('docker kill ' + id + ' && docker rm ' + id, function (childProcessErr) {
+                assert.that(childProcessErr, is.null());
+                done();
+              });
+            });
+          }, 0.5 * 1000);
+        });
+      });
+
+      test('mounts multiple volumes.', function (done) {
+        dockWorker.startContainer({
+          image: settings.image,
+          name: settings.containerName,
+          ports: [
+            { container: 3000, host: 3000 },
+            { container: 4000, host: 4000 }
+          ],
+          volumes: [
+            { container: '/data1', host: path.join(__dirname, 'testBox', 'toBeMounted') },
+            { container: '/data2', host: path.join(__dirname, 'testBox', 'toBeMounted') }
+          ]
+        }, function (err, id) {
+          assert.that(err, is.null());
+
+          setTimeout(function () {
+            request.get(url.format({
+              protocol: 'http',
+              hostname: settings.host,
+              port: 3000,
+              pathname: '/'
+            }), function (err, res, body) {
+              assert.that(err, is.null());
+              assert.that(res.statusCode, is.equalTo(200));
+              assert.that(body, is.equalTo('foobar\n'));
+
+              request.get(url.format({
+                protocol: 'http',
+                hostname: settings.host,
+                port: 4000,
+                pathname: '/'
+              }), function (err, res, body) {
+                assert.that(err, is.null());
+                assert.that(res.statusCode, is.equalTo(200));
+                assert.that(body, is.equalTo('foobar\n'));
+
+                childProcess.exec('docker kill ' + id + ' && docker rm ' + id, function (childProcessErr) {
+                  assert.that(childProcessErr, is.null());
+                  done();
+                });
+              });
+            });
+          }, 0.5 * 1000);
+        });
+      });
     });
   });
 
