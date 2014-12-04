@@ -127,6 +127,31 @@ dockWorker.start({
 });
 ```
 
+### Getting information on running containers
+
+To get information on running containers for a specific image, use the `getRunningContainersFor` function and provide the image name.
+
+```javascript
+dockWorker.getRunningContainersFor('my-image', function (err, containers) {
+  console.log(containers);
+  // => [
+  //      {
+  //        image: 'my-image',
+  //        name: 'my-container',
+  //        ports: [
+  //          { container: 3000, host: 3000 }
+  //        ],
+  //        env: {
+  //          PORT: '3000'
+  //        },
+  //        volumes: [
+  //          { container: '/data', host: '/home/janedoe/foo' }
+  //        ]
+  //      }
+  //    ]
+});
+```
+
 ### Stopping a container
 
 To stop and automatically remove a running container, call the `stop` function and provide the name of the container.
