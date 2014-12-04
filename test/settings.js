@@ -15,4 +15,7 @@ settings.certificate = fs.readFileSync(path.join(process.env.DOCKER_CERT_PATH, '
 settings.caCertificate = fs.readFileSync(path.join(process.env.DOCKER_CERT_PATH, 'ca.pem'));
 /*eslint-enable no-process-env*/
 
+settings.image = 'thenativeweb/crew-test';
+settings.containerName = 'crew-test';
+
 module.exports = settings;
