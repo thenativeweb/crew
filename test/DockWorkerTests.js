@@ -5,7 +5,7 @@ var childProcess = require('child_process'),
     url = require('url');
 
 var assert = require('node-assertthat'),
-    Knock = require('knockat'),
+    knock = require('knockat'),
     request = require('request');
 
 var DockWorker = require('../lib/DockWorker'),
@@ -183,10 +183,8 @@ suite('DockWorker', function () {
             { container: 3000, host: 3000 }
           ]
         }, function (err, id) {
-          var knock;
           assert.that(err, is.null());
 
-          knock = new Knock();
           knock.at(settings.host, 3000, function (err) {
             assert.that(err, is.null());
 
@@ -207,14 +205,11 @@ suite('DockWorker', function () {
             { container: 4000, host: 5000 }
           ]
         }, function (err, id) {
-          var knock;
           assert.that(err, is.null());
 
-          knock = new Knock();
           knock.at(settings.host, 3000, function (err) {
             assert.that(err, is.null());
 
-            knock = new Knock();
             knock.at(settings.host, 5000, function (err) {
               assert.that(err, is.null());
 
@@ -240,10 +235,8 @@ suite('DockWorker', function () {
             { container: 5000, host: 5000 }
           ]
         }, function (err, id) {
-          var knock;
           assert.that(err, is.null());
 
-          knock = new Knock();
           knock.at(settings.host, 5000, function (err) {
             assert.that(err, is.null());
 
@@ -268,14 +261,11 @@ suite('DockWorker', function () {
             { container: 6000, host: 6000 }
           ]
         }, function (err, id) {
-          var knock;
           assert.that(err, is.null());
 
-          knock = new Knock();
           knock.at(settings.host, 5000, function (err) {
             assert.that(err, is.null());
 
-            knock = new Knock();
             knock.at(settings.host, 6000, function (err) {
               assert.that(err, is.null());
 
@@ -441,7 +431,7 @@ suite('DockWorker', function () {
       dockWorker.startContainer({
         image: settings.image,
         name: settings.containerName
-      }, function (err, id) {
+      }, function (err) {
         assert.that(err, is.null());
 
         dockWorker.getRunningContainersFor('xxx-thenativeweb/crew-test-xxx', function (err, containers) {
@@ -465,7 +455,7 @@ suite('DockWorker', function () {
         volumes: [
           { container: '/data1', host: path.join(__dirname, 'testBox', 'toBeMounted') }
         ]
-      }, function (err, id) {
+      }, function (err) {
         assert.that(err, is.null());
 
         dockWorker.getRunningContainersFor(settings.image, function (err, containers) {
