@@ -1,6 +1,6 @@
 'use strict';
 
-var assert = require('node-assertthat');
+var assert = require('assertthat');
 
 var crew = require('../lib/crew'),
     settings = require('./settings');
