@@ -36,50 +36,50 @@ suite('DockWorker', function () {
 
   suite('ping', function () {
     test('is a function.', function (done) {
-      assert.that(dockWorker.ping, is.ofType('function'));
+      assert.that(dockWorker.ping).is.ofType('function');
       done();
     });
 
     test('throws an error if callback is missing.', function (done) {
       assert.that(function () {
         dockWorker.ping();
-      }, is.throwing('Callback is missing.'));
+      }).is.throwing('Callback is missing.');
       done();
     });
   });
 
   suite('hasImage', function () {
     test('is a function.', function (done) {
-      assert.that(dockWorker.hasImage, is.ofType('function'));
+      assert.that(dockWorker.hasImage).is.ofType('function');
       done();
     });
 
     test('throws an error if name is missing.', function (done) {
       assert.that(function () {
         dockWorker.hasImage();
-      }, is.throwing('Name is missing.'));
+      }).is.throwing('Name is missing.');
       done();
     });
 
     test('throws an error if callback is missing.', function (done) {
       assert.that(function () {
         dockWorker.hasImage(settings.image);
-      }, is.throwing('Callback is missing.'));
+      }).is.throwing('Callback is missing.');
       done();
     });
 
     test('returns true if the specified image is available.', function (done) {
       dockWorker.hasImage(settings.image, function (err, hasImage) {
-        assert.that(err, is.null());
-        assert.that(hasImage, is.true());
+        assert.that(err).is.null();
+        assert.that(hasImage).is.true();
         done();
       });
     });
 
     test('returns false if the specified image is not available.', function (done) {
       dockWorker.hasImage('thenativeweb/xxx-crew-test-xxx', function (err, hasImage) {
-        assert.that(err, is.null());
-        assert.that(hasImage, is.false());
+        assert.that(err).is.null();
+        assert.that(hasImage).is.false();
         done();
       });
     });
@@ -87,34 +87,34 @@ suite('DockWorker', function () {
 
   suite('downloadImage', function () {
     test('is a function.', function (done) {
-      assert.that(dockWorker.downloadImage, is.ofType('function'));
+      assert.that(dockWorker.downloadImage).is.ofType('function');
       done();
     });
 
     test('throws an error if name is missing.', function (done) {
       assert.that(function () {
         dockWorker.downloadImage();
-      }, is.throwing('Name is missing.'));
+      }).is.throwing('Name is missing.');
       done();
     });
 
     test('throws an error if callback is missing.', function (done) {
       assert.that(function () {
         dockWorker.downloadImage(settings.image);
-      }, is.throwing('Callback is missing.'));
+      }).is.throwing('Callback is missing.');
       done();
     });
 
     test('returns an error if the specified image could not be downloaded.', function (done) {
       dockWorker.downloadImage('thenativeweb/xxx-crew-test-xxx', function (err) {
-        assert.that(err, is.not.null());
+        assert.that(err).is.not.null();
         done();
       });
     });
 
     test('does not return an error if the specified image was downloaded.', function (done) {
       dockWorker.downloadImage('hello-world', function (err) {
-        assert.that(err, is.null());
+        assert.that(err).is.null();
         done();
       });
     });
@@ -122,14 +122,14 @@ suite('DockWorker', function () {
 
   suite('startContainer', function () {
     test('is a function.', function (done) {
-      assert.that(dockWorker.startContainer, is.ofType('function'));
+      assert.that(dockWorker.startContainer).is.ofType('function');
       done();
     });
 
     test('throws an error if options are missing.', function (done) {
       assert.that(function () {
         dockWorker.startContainer();
-      }, is.throwing('Options are missing.'));
+      }).is.throwing('Options are missing.');
       done();
     });
 
@@ -138,7 +138,7 @@ suite('DockWorker', function () {
         dockWorker.startContainer({
           name: settings.containerName
         });
-      }, is.throwing('Image is missing.'));
+      }).is.throwing('Image is missing.');
       done();
     });
 
@@ -147,7 +147,7 @@ suite('DockWorker', function () {
         dockWorker.startContainer({
           image: settings.image
         });
-      }, is.throwing('Name is missing.'));
+      }).is.throwing('Name is missing.');
       done();
     });
 
@@ -157,7 +157,7 @@ suite('DockWorker', function () {
           image: settings.image,
           name: settings.containerName
         });
-      }, is.throwing('Callback is missing.'));
+      }).is.throwing('Callback is missing.');
       done();
     });
 
@@ -167,8 +167,8 @@ suite('DockWorker', function () {
         name: settings.containerName
       }, function (err, id) {
         childProcess.exec('docker kill ' + id + ' && docker rm ' + id, function (childProcessErr) {
-          assert.that(childProcessErr, is.null());
-          assert.that(err, is.null());
+          assert.that(childProcessErr).is.null();
+          assert.that(err).is.null();
           done();
         });
       });
@@ -183,13 +183,13 @@ suite('DockWorker', function () {
             { container: 3000, host: 3000 }
           ]
         }, function (errStartContainer, id) {
-          assert.that(errStartContainer, is.null());
+          assert.that(errStartContainer).is.null();
 
           knock.at(settings.host, 3000, function (err) {
-            assert.that(err, is.null());
+            assert.that(err).is.null();
 
             childProcess.exec('docker kill ' + id + ' && docker rm ' + id, function (childProcessErr) {
-              assert.that(childProcessErr, is.null());
+              assert.that(childProcessErr).is.null();
               done();
             });
           });
@@ -205,16 +205,16 @@ suite('DockWorker', function () {
             { container: 4000, host: 5000 }
           ]
         }, function (errStartContainer, id) {
-          assert.that(errStartContainer, is.null());
+          assert.that(errStartContainer).is.null();
 
           knock.at(settings.host, 3000, function (errAt) {
-            assert.that(errAt, is.null());
+            assert.that(errAt).is.null();
 
             knock.at(settings.host, 5000, function (err) {
-              assert.that(err, is.null());
+              assert.that(err).is.null();
 
               childProcess.exec('docker kill ' + id + ' && docker rm ' + id, function (childProcessErr) {
-                assert.that(childProcessErr, is.null());
+                assert.that(childProcessErr).is.null();
                 done();
               });
             });
@@ -229,19 +229,19 @@ suite('DockWorker', function () {
           image: settings.image,
           name: settings.containerName,
           env: {
-            port1: 5000
+            port1: 6000
           },
           ports: [
-            { container: 5000, host: 5000 }
+            { container: 6000, host: 6000 }
           ]
         }, function (errStartContainer, id) {
-          assert.that(errStartContainer, is.null());
+          assert.that(errStartContainer).is.null();
 
-          knock.at(settings.host, 5000, function (errAt) {
-            assert.that(errAt, is.null());
+          knock.at(settings.host, 6000, function (errAt) {
+            assert.that(errAt).is.null();
 
             childProcess.exec('docker kill ' + id + ' && docker rm ' + id, function (err) {
-              assert.that(err, is.null());
+              assert.that(err).is.null();
               done();
             });
           });
@@ -253,24 +253,24 @@ suite('DockWorker', function () {
           image: settings.image,
           name: settings.containerName,
           env: {
-            port1: 5000,
-            port2: 6000
+            port1: 6000,
+            port2: 7000
           },
           ports: [
-            { container: 5000, host: 5000 },
-            { container: 6000, host: 6000 }
+            { container: 6000, host: 6000 },
+            { container: 7000, host: 7000 }
           ]
         }, function (errStartContainer, id) {
-          assert.that(errStartContainer, is.null());
+          assert.that(errStartContainer).is.null();
 
-          knock.at(settings.host, 5000, function (errAt1) {
-            assert.that(errAt1, is.null());
+          knock.at(settings.host, 6000, function (errAt1) {
+            assert.that(errAt1).is.null();
 
-            knock.at(settings.host, 6000, function (errAt2) {
-              assert.that(errAt2, is.null());
+            knock.at(settings.host, 7000, function (errAt2) {
+              assert.that(errAt2).is.null();
 
               childProcess.exec('docker kill ' + id + ' && docker rm ' + id, function (err) {
-                assert.that(err, is.null());
+                assert.that(err).is.null();
                 done();
               });
             });
@@ -291,7 +291,7 @@ suite('DockWorker', function () {
             { container: '/data1', host: path.join(__dirname, 'testBox', 'toBeMounted') }
           ]
         }, function (errStartContainer, id) {
-          assert.that(errStartContainer, is.null());
+          assert.that(errStartContainer).is.null();
 
           setTimeout(function () {
             request.get(url.format({
@@ -300,12 +300,12 @@ suite('DockWorker', function () {
               port: 3000,
               pathname: '/'
             }), function (errGet, res, body) {
-              assert.that(errGet, is.null());
-              assert.that(res.statusCode, is.equalTo(200));
-              assert.that(body, is.equalTo('foobar\n'));
+              assert.that(errGet).is.null();
+              assert.that(res.statusCode).is.equalTo(200);
+              assert.that(body).is.equalTo('foobar\n');
 
               childProcess.exec('docker kill ' + id + ' && docker rm ' + id, function (err) {
-                assert.that(err, is.null());
+                assert.that(err).is.null();
                 done();
               });
             });
@@ -326,7 +326,7 @@ suite('DockWorker', function () {
             { container: '/data2', host: path.join(__dirname, 'testBox', 'toBeMounted') }
           ]
         }, function (errStartContainer, id) {
-          assert.that(errStartContainer, is.null());
+          assert.that(errStartContainer).is.null();
 
           setTimeout(function () {
             request.get(url.format({
@@ -335,9 +335,9 @@ suite('DockWorker', function () {
               port: 3000,
               pathname: '/'
             }), function (errGet1, resGet, bodyGet) {
-              assert.that(errGet1, is.null());
-              assert.that(resGet.statusCode, is.equalTo(200));
-              assert.that(bodyGet, is.equalTo('foobar\n'));
+              assert.that(errGet1).is.null();
+              assert.that(resGet.statusCode).is.equalTo(200);
+              assert.that(bodyGet).is.equalTo('foobar\n');
 
               request.get(url.format({
                 protocol: 'http',
@@ -345,12 +345,12 @@ suite('DockWorker', function () {
                 port: 4000,
                 pathname: '/'
               }), function (errGet2, res, body) {
-                assert.that(errGet2, is.null());
-                assert.that(res.statusCode, is.equalTo(200));
-                assert.that(body, is.equalTo('foobar\n'));
+                assert.that(errGet2).is.null();
+                assert.that(res.statusCode).is.equalTo(200);
+                assert.that(body).is.equalTo('foobar\n');
 
                 childProcess.exec('docker kill ' + id + ' && docker rm ' + id, function (err) {
-                  assert.that(err, is.null());
+                  assert.that(err).is.null();
                   done();
                 });
               });
@@ -359,40 +359,87 @@ suite('DockWorker', function () {
         });
       });
     });
+
+    suite('links', function () {
+      test('connects two containers.', function (done) {
+        dockWorker.startContainer({
+          image: settings.image,
+          name: settings.containerName + '1'
+        }, function (errStartContainer1, id1) {
+          assert.that(errStartContainer1).is.null();
+
+          dockWorker.startContainer({
+            image: settings.image,
+            name: settings.containerName + '2',
+            links: [
+              { name: settings.containerName + '1', alias: 'foobar' }
+            ],
+            ports: [
+              { container: 5000, host: 5000 }
+            ]
+          }, function (errStartContainer2, id2) {
+            assert.that(errStartContainer2).is.null();
+
+            setTimeout(function () {
+              request.get(url.format({
+                protocol: 'http',
+                hostname: settings.host,
+                port: 5000,
+                pathname: '/'
+              }), function (errGet, resGet, bodyGet) {
+                assert.that(errGet).is.null();
+                assert.that(resGet.statusCode).is.equalTo(200);
+                assert.that(bodyGet.indexOf('foobar')).is.not.equalTo(-1);
+
+                childProcess.exec([
+                  'docker kill ' + id1,
+                  'docker rm ' + id1,
+                  'docker kill ' + id2,
+                  'docker rm ' + id2
+                ].join(' && '), function (err) {
+                  assert.that(err).is.null();
+                  done();
+                });
+              });
+            }, 0.5 * 1000);
+          });
+        });
+      });
+    });
   });
 
   suite('stopContainer', function () {
     test('is a function.', function (done) {
-      assert.that(dockWorker.stopContainer, is.ofType('function'));
+      assert.that(dockWorker.stopContainer).is.ofType('function');
       done();
     });
 
     test('throws an error if name is missing.', function (done) {
       assert.that(function () {
         dockWorker.stopContainer();
-      }, is.throwing('Name is missing.'));
+      }).is.throwing('Name is missing.');
       done();
     });
 
     test('throws an error if callback is missing.', function (done) {
       assert.that(function () {
         dockWorker.stopContainer(settings.containerName);
-      }, is.throwing('Callback is missing.'));
+      }).is.throwing('Callback is missing.');
       done();
     });
 
     test('returns an error if the specified container could not be stopped.', function (done) {
       dockWorker.stopContainer('xxx-crew-test-xxx', function (err) {
-        assert.that(err, is.not.null());
+        assert.that(err).is.not.null();
         done();
       });
     });
 
     test('does not return an error if the specified container was stopped.', function (done) {
       childProcess.exec('docker run -d --name ' + settings.containerName + ' ' + settings.image, function (childProcessErr) {
-        assert.that(childProcessErr, is.null());
+        assert.that(childProcessErr).is.null();
         dockWorker.stopContainer(settings.containerName, function (err) {
-          assert.that(err, is.null());
+          assert.that(err).is.null();
           done();
         });
       });
@@ -401,28 +448,28 @@ suite('DockWorker', function () {
 
   suite('getRunningContainersFor', function () {
     test('is a function.', function (done) {
-      assert.that(dockWorker.getRunningContainersFor, is.ofType('function'));
+      assert.that(dockWorker.getRunningContainersFor).is.ofType('function');
       done();
     });
 
     test('throws an error if name is missing.', function (done) {
       assert.that(function () {
         dockWorker.getRunningContainersFor();
-      }, is.throwing('Name is missing.'));
+      }).is.throwing('Name is missing.');
       done();
     });
 
     test('throws an error if callback is missing.', function (done) {
       assert.that(function () {
         dockWorker.getRunningContainersFor(settings.image);
-      }, is.throwing('Callback is missing.'));
+      }).is.throwing('Callback is missing.');
       done();
     });
 
     test('returns an empty array if no containers are running.', function (done) {
       dockWorker.getRunningContainersFor(settings.image, function (err, containers) {
-        assert.that(err, is.null());
-        assert.that(containers.length, is.equalTo(0));
+        assert.that(err).is.null();
+        assert.that(containers.length).is.equalTo(0);
         done();
       });
     });
@@ -432,11 +479,11 @@ suite('DockWorker', function () {
         image: settings.image,
         name: settings.containerName
       }, function (errStartContainer) {
-        assert.that(errStartContainer, is.null());
+        assert.that(errStartContainer).is.null();
 
         dockWorker.getRunningContainersFor('xxx-thenativeweb/crew-test-xxx', function (err, containers) {
-          assert.that(err, is.null());
-          assert.that(containers.length, is.equalTo(0));
+          assert.that(err).is.null();
+          assert.that(containers.length).is.equalTo(0);
           dockWorker.stopContainer(settings.containerName, done);
         });
       });
@@ -456,18 +503,18 @@ suite('DockWorker', function () {
           { container: '/data1', host: path.join(__dirname, 'testBox', 'toBeMounted') }
         ]
       }, function (errStartContainer) {
-        assert.that(errStartContainer, is.null());
+        assert.that(errStartContainer).is.null();
 
         dockWorker.getRunningContainersFor(settings.image, function (err, containers) {
-          assert.that(err, is.null());
-          assert.that(containers.length, is.equalTo(1));
-          assert.that(containers[0].image, is.equalTo(settings.image));
-          assert.that(containers[0].name, is.equalTo(settings.containerName));
-          assert.that(containers[0].ports.length, is.equalTo(1));
-          assert.that(containers[0].ports[0], is.equalTo({ container: 3000, host: 3000 }));
-          assert.that(containers[0].env.PORT, is.equalTo('3000'));
-          assert.that(containers[0].volumes.length, is.equalTo(1));
-          assert.that(containers[0].volumes[0], is.equalTo({ container: '/data1', host: path.join(__dirname, 'testBox', 'toBeMounted') }));
+          assert.that(err).is.null();
+          assert.that(containers.length).is.equalTo(1);
+          assert.that(containers[0].image).is.equalTo(settings.image);
+          assert.that(containers[0].name).is.equalTo(settings.containerName);
+          assert.that(containers[0].ports.length).is.equalTo(1);
+          assert.that(containers[0].ports[0]).is.equalTo({ container: 3000, host: 3000 });
+          assert.that(containers[0].env.PORT).is.equalTo('3000');
+          assert.that(containers[0].volumes.length).is.equalTo(1);
+          assert.that(containers[0].volumes[0]).is.equalTo({ container: '/data1', host: path.join(__dirname, 'testBox', 'toBeMounted') });
 
           dockWorker.stopContainer(settings.containerName, done);
         });

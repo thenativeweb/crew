@@ -127,6 +127,22 @@ dockWorker.start({
 });
 ```
 
+#### Using links
+
+To link a container to another one, add the `links` property to the parameter object and hand over an array of link mappings.
+
+```javascript
+dockWorker.start({
+  image: 'hello-world',
+  name: 'myContainer',
+  links: [
+    { name: 'mongodb', alias: 'db' }
+  ]
+}, function (err, id) {
+  // ...
+});
+```
+
 ### Getting information on running containers
 
 To get information on running containers for a specific image, use the `getRunningContainersFor` function and provide the image name.
@@ -175,7 +191,7 @@ Before running the test, you need to build the `thenativeweb/crew-test` image. I
 ## License
 
 The MIT License (MIT)
-Copyright (c) 2014 the native web.
+Copyright (c) 2014-2015 the native web.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

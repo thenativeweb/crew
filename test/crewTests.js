@@ -7,14 +7,14 @@ var crew = require('../lib/crew'),
 
 suite('crew', function () {
   test('is a function.', function (done) {
-    assert.that(crew, is.ofType('function'));
+    assert.that(crew).is.ofType('function');
     done();
   });
 
   test('throws an error when the options are missing.', function (done) {
     assert.that(function () {
       crew();
-    }, is.throwing('Options are missing.'));
+    }).is.throwing('Options are missing.');
     done();
   });
 
@@ -28,7 +28,7 @@ suite('crew', function () {
           caCertificate: settings.caCertificate
         }
       });
-    }, is.throwing('Host is missing.'));
+    }).is.throwing('Host is missing.');
     done();
   });
 
@@ -42,7 +42,7 @@ suite('crew', function () {
           caCertificate: settings.caCertificate
         }
       });
-    }, is.throwing('Port is missing.'));
+    }).is.throwing('Port is missing.');
     done();
   });
 
@@ -52,7 +52,7 @@ suite('crew', function () {
         host: settings.host,
         port: settings.port
       });
-    }, is.throwing('Keys are missing.'));
+    }).is.throwing('Keys are missing.');
     done();
   });
 
@@ -66,7 +66,7 @@ suite('crew', function () {
           caCertificate: settings.caCertificate
         }
       });
-    }, is.throwing('Private key is missing.'));
+    }).is.throwing('Private key is missing.');
     done();
   });
 
@@ -80,7 +80,7 @@ suite('crew', function () {
           caCertificate: settings.caCertificate
         }
       });
-    }, is.throwing('Certificate is missing.'));
+    }).is.throwing('Certificate is missing.');
     done();
   });
 
@@ -94,7 +94,7 @@ suite('crew', function () {
           certificate: settings.certificate
         }
       });
-    }, is.throwing('CA certificate is missing.'));
+    }).is.throwing('CA certificate is missing.');
     done();
   });
 
@@ -109,7 +109,7 @@ suite('crew', function () {
           caCertificate: settings.caCertificate
         }
       });
-    }, is.throwing('Callback is missing.'));
+    }).is.throwing('Callback is missing.');
     done();
   });
 
@@ -123,7 +123,7 @@ suite('crew', function () {
         caCertificate: settings.caCertificate
       }
     }, function (err) {
-      assert.that(err, is.not.null());
+      assert.that(err).is.not.null();
       done();
     });
   });
@@ -140,7 +140,7 @@ suite('crew', function () {
         caCertificate: settings.caCertificate
       }
     }, function (err) {
-      assert.that(err, is.not.null());
+      assert.that(err).is.not.null();
       done();
     });
   });
@@ -155,7 +155,7 @@ suite('crew', function () {
         caCertificate: settings.caCertificate
       }
     }, function (err) {
-      assert.that(err, is.null());
+      assert.that(err).is.null();
       done();
     });
   });
