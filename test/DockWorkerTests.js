@@ -406,6 +406,45 @@ suite('DockWorker', function () {
         });
       });
     });
+
+    suite('network.hosts', function () {
+      test('adds additional entries to /etc/hosts.', function (done) {
+        dockWorker.startContainer({
+          image: settings.image,
+          name: settings.containerName,
+          ports: [
+            { container: 5000, host: 5000 }
+          ],
+          network: {
+            hosts: [
+              { name: 'local.wolkenkit.io', ip: '192.168.59.103' },
+              { name: 'auth.wolkenkit.io', ip: '192.168.59.104' }
+            ]
+          }
+        }, function (errStartContainer, id) {
+          assert.that(errStartContainer).is.null();
+
+          setTimeout(function () {
+            request.get(url.format({
+              protocol: 'http',
+              hostname: settings.host,
+              port: 5000,
+              pathname: '/'
+            }), function (errGet, resGet, bodyGet) {
+              assert.that(errGet).is.null();
+              assert.that(resGet.statusCode).is.equalTo(200);
+              assert.that(/^192\.168\.59\.103\s+local\.wolkenkit\.io$/gm.test(bodyGet)).is.true();
+              assert.that(/^192\.168\.59\.104\s+auth\.wolkenkit\.io$/gm.test(bodyGet)).is.true();
+
+              childProcess.exec('docker kill ' + id + ' && docker rm ' + id, function (err) {
+                assert.that(err).is.null();
+                done();
+              });
+            });
+          }, 0.5 * 1000);
+        });
+      });
+    });
   });
 
   suite('stopContainer', function () {

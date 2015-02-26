@@ -143,6 +143,24 @@ dockWorker.start({
 });
 ```
 
+#### Configuring network settings
+
+To add extra hosts to the container's `/etc/hosts` file, add the `network` property to the parameter object and assign a `hosts` property to it.
+
+```javascript
+dockWorker.start({
+  image: 'hello-world',
+  name: 'myContainer',
+  network: {
+    hosts: [
+      { name: 'example.com', ip: '192.168.0.1' }
+    ]
+  }
+}, function (err, id) {
+  // ...
+});
+```
+
 ### Getting information on running containers
 
 To get information on running containers for a specific image, use the `getRunningContainersFor` function and provide the image name.
