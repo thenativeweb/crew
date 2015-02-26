@@ -180,7 +180,15 @@ dockWorker.getRunningContainersFor('my-image', function (err, containers) {
   //        },
   //        volumes: [
   //          { container: '/data', host: '/home/janedoe/foo' }
-  //        ]
+  //        ],
+  //        links: [
+  //          { name: 'your-container', alias: 'yours' }
+  //        ],
+  //        network: {
+  //          hosts: [
+  //            { name: 'example.com', ip: '192.168.0.1' }
+  //          ]
+  //        }
   //      }
   //    ]
 });
