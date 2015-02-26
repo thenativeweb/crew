@@ -15,7 +15,7 @@
   "main": "lib/crew.js",
   "dependencies": {
     "dockerode": "2.0.7",
-    "lodash": "3.3.0",
+    "lodash": "3.3.1",
     "q": "1.2.0"
   },
   "devDependencies": {
