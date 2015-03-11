@@ -21,7 +21,7 @@ dependencies:
 
 test:
   pre:
-    - sudo sed -i "s/^DOCKER_OPTS.*$/DOCKER_OPTS=\"-s\ btrfs\ -e\ lxc\ -H=tcp:\/\/127\.0\.0\.1:2376\"\ --tlsverify\ --tlscacert=~\/\$CIRCLE_PROJECT_REPONAME\/test\/certificate\/ca\.pem\ --tlscert=~\/\$CIRCLE_PROJECT_REPONAME\/test\/certificate\/cert\.pem\ --tlskey=~\/\$CIRCLE_PROJECT_REPONAME\/test\/certificate\/key\.pem\"/" /etc/default/docker
+    - sudo sed -i "s/^DOCKER_OPTS.*$/DOCKER_OPTS=\"-s\ btrfs\ -e\ lxc\ -H=tcp:\/\/127\.0\.0\.1:2376\"\ --tlsverify\ --tlscacert=\/home\/ubuntu\/crew\/test\/certificate\/ca\.pem\ --tlscert=~\/home\/ubuntu\/crew\/test\/certificate\/cert\.pem\ --tlskey=~\/home\/ubuntu\/crew\/test\/certificate\/key\.pem\"/" /etc/default/docker
     - sudo service docker restart
     - docker build -t thenativeweb/crew-test .
 
