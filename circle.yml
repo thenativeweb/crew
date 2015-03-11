@@ -13,7 +13,7 @@ machine:
   environment:
     DOCKER_HOST: tcp://127.0.0.1:2376
     DOCKER_TLS_VERIFY: yes
-    DOCKER_CERT_PATH: ~/$CIRCLE_PROJECT_REPONAME/test/certificate
+    DOCKER_CERT_PATH: /home/ubuntu/crew/test/certificate
 
 dependencies:
   pre:
