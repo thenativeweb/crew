@@ -15,15 +15,15 @@
   "main": "lib/crew.js",
   "dependencies": {
     "dockerode": "2.0.7",
-    "lodash": "3.3.1",
+    "lodash": "3.5.0",
     "q": "1.2.0"
   },
   "devDependencies": {
-    "assertthat": "0.5.1",
+    "assertthat": "0.5.3",
     "grunt": "0.4.5",
-    "knockat": "0.1.2",
+    "knockat": "0.1.4",
     "request": "2.53.0",
-    "tourism": "0.14.0"
+    "tourism": "0.15.0"
   },
   "repository": {
     "type": "git",

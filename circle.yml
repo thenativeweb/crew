@@ -7,10 +7,16 @@ machine:
   node:
     version: 1.2.0
 
+  services:
+    - docker
+
 dependencies:
   pre:
     - npm install -g grunt-cli
 
 test:
+  pre:
+    - docker build -t thenativeweb/crew-test .
+
   override:
     - grunt
