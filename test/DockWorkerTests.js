@@ -14,7 +14,7 @@ var DockWorker = require('../lib/DockWorker'),
 suite('DockWorker', function () {
   var dockWorker;
 
-  this.timeout(10 * 1000);
+  this.timeout(30 * 1000);
 
   suiteSetup(function (done) {
     dockWorker = new DockWorker({
