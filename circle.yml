@@ -11,12 +11,14 @@ machine:
     - docker
 
   environment:
+    CREW_HOME: $HOME/$CIRCLE_PROJECT_REPONAME
     DOCKER_HOST: tcp://localhost:2376
     DOCKER_TLS_VERIFY: yes
     DOCKER_CERT_PATH: /home/ubuntu/crew/test/certificate
 
 dependencies:
   pre:
+    - echo $CREW_HOME
     - npm install -g grunt-cli
 
 test:
