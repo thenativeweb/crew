@@ -11,7 +11,7 @@ machine:
     - docker
 
   environment:
-    DOCKER_HOST: tcp://localhost:2376
+    DOCKER_HOST: tcp://127.0.0.1:2376
     DOCKER_TLS_VERIFY: yes
     DOCKER_CERT_PATH: $HOME/$CIRCLE_PROJECT_REPONAME/test/certificate
 
@@ -23,6 +23,8 @@ test:
   pre:
     - sudo bash -c 'echo "DOCKER_OPTS=\"-s btrfs -e lxc -H=tcp://127.0.0.1:2376 --tlsverify --tlscacert=$DOCKER_CERT_PATH/ca.pem --tlscert=$DOCKER_CERT_PATH/cert.pem --tlskey=$DOCKER_CERT_PATH/key.pem\"" >> /etc/default/docker'
     - sudo service docker restart
+    - echo "Host: $DOCKER_HOST"
+    - echo "Certificates: $DOCKER_CERT_PATH"
     - docker build -t thenativeweb/crew-test .
 
   override:
