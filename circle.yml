@@ -10,12 +10,19 @@ machine:
   services:
     - docker
 
+  environment:
+    DOCKER_HOST: tcp://127.0.0.1:2376
+    DOCKER_TLS_VERIFY: yes
+    DOCKER_CERT_PATH: $(pwd)/test/certificate
+
 dependencies:
   pre:
     - npm install -g grunt-cli
 
 test:
   pre:
+    - sudo sed -i 's/^DOCKER_OPTS.*$/DOCKER_OPTS="-s btrfs -e lxc -H=tcp://127.0.0.1:2376"/ --tlsverify --tlscacert=$(pwd)/test/certificate/ca.pem --tlscert=$(pwd)/test/certificate/cert.pem --tlskey=$(pwd)/test/certificate/key.pem' /etc/default/docker
+    - sudo service docker restart
     - docker build -t thenativeweb/crew-test .
 
   override:
