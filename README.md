@@ -2,6 +2,8 @@
 
 crew makes managing Docker a breeze.
 
+[![Circle CI](https://circleci.com/gh/thenativeweb/crew.svg?style=svg)](https://circleci.com/gh/thenativeweb/crew)
+
 ## Installation
 
     $ npm install crew
