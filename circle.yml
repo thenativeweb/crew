@@ -21,7 +21,7 @@ dependencies:
 
 test:
   pre:
-    - sudo sed -i "s/^DOCKER_OPTS.*$/DOCKER_OPTS=\"-s\ btrfs\ -e\ lxc\ -H=tcp:\/\/127\.0\.0\.1:2376\ --tlsverify\ --tlscacert=\$DOCKER_CERT_PATH\/ca\.pem\ --tlscert=\$DOCKER_CERT_PATH\/cert\.pem\ --tlskey=\$DOCKER_CERT_PATH\/key\.pem\"/" /etc/default/docker
+    - sudo sed -i "s/^DOCKER_OPTS.*$/DOCKER_OPTS=\"-s\ btrfs\ -e\ lxc\ -H=tcp:\/\/127\.0\.0\.1:2376\ --tlsverify\ --tlscacert=\$(echo\ \$DOCKER_CERT_PATH)\/ca\.pem\ --tlscert=\$DOCKER_CERT_PATH\/cert\.pem\ --tlskey=\$DOCKER_CERT_PATH\/key\.pem\"/" /etc/default/docker
     - sudo service docker restart
     - docker build -t thenativeweb/crew-test .
 
