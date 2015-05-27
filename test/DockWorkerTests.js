@@ -174,6 +174,90 @@ suite('DockWorker', function () {
       });
     });
 
+    suite('restart policy', function () {
+      test('defaults to never.', function (done) {
+        dockWorker.startContainer({
+          image: settings.image,
+          name: settings.containerName,
+          ports: [
+            { container: 6000, host: 6000 }
+          ]
+        }, function (errStartContainer, id) {
+          assert.that(errStartContainer).is.null();
+
+          setTimeout(function () {
+            request.get(url.format({
+              protocol: 'http',
+              hostname: settings.host,
+              port: 6000,
+              pathname: '/'
+            }), function (errGet, res) {
+              assert.that(errGet).is.null();
+              assert.that(res.statusCode).is.equalTo(200);
+
+              setTimeout(function () {
+                request.get(url.format({
+                  protocol: 'http',
+                  hostname: settings.host,
+                  port: 6000,
+                  pathname: '/'
+                }), function (errGet2) {
+                  assert.that(errGet2).is.not.null();
+
+                  childProcess.exec('docker kill ' + id + ' && docker rm ' + id, function (err) {
+                    assert.that(err).is.null();
+                    done();
+                  });
+                });
+              }, 0.5 * 1000);
+            });
+          }, 0.5 * 1000);
+        });
+      });
+
+      test('automatically restarts the server.', function (done) {
+        dockWorker.startContainer({
+          image: settings.image,
+          name: settings.containerName,
+          restart: true,
+          ports: [
+            { container: 6000, host: 6000 }
+          ]
+        }, function (errStartContainer, id) {
+          assert.that(errStartContainer).is.null();
+
+          setTimeout(function () {
+            request.get(url.format({
+              protocol: 'http',
+              hostname: settings.host,
+              port: 6000,
+              pathname: '/'
+            }), function (errGet, res) {
+              assert.that(errGet).is.null();
+              assert.that(res.statusCode).is.equalTo(200);
+
+              setTimeout(function () {
+                request.get(url.format({
+                  protocol: 'http',
+                  hostname: settings.host,
+                  port: 6000,
+                  pathname: '/'
+                }), function (errGet2, res2) {
+                  assert.that(errGet2).is.null();
+                  assert.that(res2.statusCode).is.equalTo(200);
+
+                  childProcess.exec('docker kill ' + id + ' && docker rm ' + id, function (err) {
+                    assert.that(err).is.null();
+                    done();
+                  });
+                });
+              }, 0.5 * 1000);
+            });
+          }, 0.5 * 1000);
+        });
+      });
+    });
+
     suite('port forwardings', function () {
       test('forwards a single port.', function (done) {
         dockWorker.startContainer({
@@ -229,15 +313,15 @@ suite('DockWorker', function () {
           image: settings.image,
           name: settings.containerName,
           env: {
-            port1: 6000
+            port1: 9999
           },
           ports: [
-            { container: 6000, host: 6000 }
+            { container: 9999, host: 9999 }
           ]
         }, function (errStartContainer, id) {
           assert.that(errStartContainer).is.null();
 
-          knock.at(settings.host, 6000, function (errAt) {
+          knock.at(settings.host, 9999, function (errAt) {
             assert.that(errAt).is.null();
 
             childProcess.exec('docker kill ' + id + ' && docker rm ' + id, function (err) {
@@ -253,20 +337,20 @@ suite('DockWorker', function () {
           image: settings.image,
           name: settings.containerName,
           env: {
-            port1: 6000,
-            port2: 7000
+            port1: 9999,
+            port2: 9998
           },
           ports: [
-            { container: 6000, host: 6000 },
-            { container: 7000, host: 7000 }
+            { container: 9999, host: 9999 },
+            { container: 9998, host: 9998 }
           ]
         }, function (errStartContainer, id) {
           assert.that(errStartContainer).is.null();
 
-          knock.at(settings.host, 6000, function (errAt1) {
+          knock.at(settings.host, 9999, function (errAt1) {
             assert.that(errAt1).is.null();
 
-            knock.at(settings.host, 7000, function (errAt2) {
+            knock.at(settings.host, 9998, function (errAt2) {
               assert.that(errAt2).is.null();
 
               childProcess.exec('docker kill ' + id + ' && docker rm ' + id, function (err) {

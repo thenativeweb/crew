@@ -14,16 +14,16 @@
   ],
   "main": "lib/crew.js",
   "dependencies": {
-    "dockerode": "2.0.7",
-    "lodash": "3.5.0",
-    "q": "1.2.0"
+    "dockerode": "2.1.4",
+    "lodash": "3.9.3",
+    "q": "1.4.1"
   },
   "devDependencies": {
-    "assertthat": "0.5.3",
+    "assertthat": "0.6.0",
     "grunt": "0.4.5",
     "knockat": "0.1.4",
-    "request": "2.53.0",
-    "tourism": "0.15.0"
+    "request": "2.55.0",
+    "tourism": "0.19.0"
   },
   "repository": {
     "type": "git",

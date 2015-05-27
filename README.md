@@ -79,6 +79,20 @@ dockWorker.start({
 });
 ```
 
+#### Restarting crashed containers
+
+If you want your container to restart automatically on crashes, add the `restart` property to the parameter object and set it to `true`.
+
+```javascript
+dockWorker.start({
+  image: 'hello-world',
+  name: 'myContainer',
+  restart: true
+}, function (err, id) {
+  // ...
+});
+```
+
 #### Forwarding ports
 
 To forward container ports to the host, add the `ports` property to the parameter object and hand over an array of forwardings.
