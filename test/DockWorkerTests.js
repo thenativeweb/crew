@@ -6,7 +6,8 @@ var childProcess = require('child_process'),
 
 var assert = require('assertthat'),
     knock = require('knockat'),
-    request = require('request');
+    request = require('request'),
+    uuid = require('uuidv4');
 
 var DockWorker = require('../lib/DockWorker'),
     settings = require('./settings');
@@ -30,7 +31,16 @@ suite('DockWorker', function () {
 
     childProcess.exec('docker kill ' + settings.containerName + '; docker rm ' + settings.containerName, function () {
       // Intentionally ignore potential errors. Just clean up and go.
-      done();
+
+      childProcess.exec('docker rmi ' + settings.image, function () {
+        // Intentionally ignore potential errors. Just clean up and go.
+
+        dockWorker.buildImage({
+          directory: path.join(__dirname, 'testBox'),
+          dockerfile: path.join(__dirname, 'Dockerfile'),
+          name: settings.image
+        }, done);
+      });
     });
   });
 
@@ -116,6 +126,101 @@ suite('DockWorker', function () {
       dockWorker.downloadImage('hello-world', function (err) {
         assert.that(err).is.null();
         done();
+      });
+    });
+  });
+
+  suite('buildImage', function () {
+    test('is a function.', function (done) {
+      assert.that(dockWorker.buildImage).is.ofType('function');
+      done();
+    });
+
+    test('throws an error if options are missing.', function (done) {
+      assert.that(function () {
+        dockWorker.buildImage();
+      }).is.throwing('Options are missing.');
+      done();
+    });
+
+    test('throws an error if directory is missing.', function (done) {
+      assert.that(function () {
+        dockWorker.buildImage({
+          dockerfile: 'Dockerfile',
+          name: 'foo'
+        }, function () {});
+      }).is.throwing('Directory is missing.');
+      done();
+    });
+
+    test('throws an error if dockerfile is missing.', function (done) {
+      assert.that(function () {
+        dockWorker.buildImage({
+          directory: __dirname,
+          name: 'foo'
+        }, function () {});
+      }).is.throwing('Dockerfile is missing.');
+      done();
+    });
+
+    test('throws an error if name is missing.', function (done) {
+      assert.that(function () {
+        dockWorker.buildImage({
+          directory: __dirname,
+          dockerfile: 'Dockerfile'
+        }, function () {});
+      }).is.throwing('Name is missing.');
+      done();
+    });
+
+    test('throws an error if callback is missing.', function (done) {
+      assert.that(function () {
+        dockWorker.buildImage({
+          directory: __dirname,
+          dockerfile: 'Dockerfile',
+          name: 'foo'
+        });
+      }).is.throwing('Callback is missing.');
+      done();
+    });
+
+    test('builds an image.', function (done) {
+      var name = uuid();
+
+      dockWorker.buildImage({
+        directory: path.join(__dirname, 'testBox'),
+        dockerfile: path.join(__dirname, 'Dockerfile'),
+        name: name
+      }, function (errBuildImage) {
+        assert.that(errBuildImage).is.null();
+
+        dockWorker.hasImage(name, function (errHasImage, hasImage) {
+          assert.that(errHasImage).is.null();
+          assert.that(hasImage).is.true();
+
+          childProcess.exec('docker rmi ' + name, function (errRemoveImage) {
+            assert.that(errRemoveImage).is.null();
+            done();
+          });
+        });
+      });
+    });
+
+    test('returns an error if the image can not be built.', function (done) {
+      var name = uuid();
+
+      dockWorker.buildImage({
+        directory: path.join(__dirname, 'testBox'),
+        dockerfile: path.join(__dirname, 'Dockerfile-invalid'),
+        name: name
+      }, function (errBuildImage) {
+        assert.that(errBuildImage).is.not.null();
+
+        dockWorker.hasImage(name, function (errHasImage, hasImage) {
+          assert.that(errHasImage).is.null();
+          assert.that(hasImage).is.false();
+          done();
+        });
       });
     });
   });

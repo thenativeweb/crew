@@ -65,6 +65,20 @@ dockWorker.download('hello-world', function (err) {
 });
 ```
 
+### Building an image
+
+To build an image, call the `buildImage` function and provide the directory you want to use, a `Dockerfile`, and the name of the image.
+
+```javascript
+dockWorker.buildImage({
+  directory: __dirname,
+  dockerfile: path.join(__dirname, 'my-dockerfile'),
+  name: 'myImage'
+}, function (err) {
+  // ...
+});
+```
+
 ### Starting a container
 
 To create and start a container, call the `start` function and provide the name of the image and the desired container name. This returns the newly created container's id.
