@@ -34,7 +34,7 @@ suite('DockWorker', function () {
     childProcess.exec('docker rm -v $(docker kill $(docker ps -aq))', function () {
       // Intentionally ignore potential errors. Just clean up and go.
 
-      childProcess.exec('docker rmi ' + settings.image, function () {
+      childProcess.exec('docker rmi -f ' + settings.image, function () {
         // Intentionally ignore potential errors. Just clean up and go.
 
         dockWorker.buildImage({
@@ -200,7 +200,7 @@ suite('DockWorker', function () {
           assert.that(errHasImage).is.null();
           assert.that(hasImage).is.true();
 
-          childProcess.exec('docker rmi ' + name, function (errRemoveImage) {
+          childProcess.exec('docker rmi -f ' + name, function (errRemoveImage) {
             assert.that(errRemoveImage).is.null();
             done();
           });
