@@ -27,5 +27,7 @@ http.createServer(function (req, res) {
 /*eslint-enable no-process-env*/
 
 setTimeout(function () {
+  /*eslint-disable no-console*/
   console.log('Test container running...');
+  /*eslint-enable no-console*/
 }, 1 * 1000);

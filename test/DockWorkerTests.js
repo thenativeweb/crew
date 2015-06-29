@@ -707,15 +707,15 @@ suite('DockWorker', function () {
       dockWorker.startContainer({
         image: settings.image,
         name: settings.containerName
-      }, function (errStartContainer, id) {
+      }, function (errStartContainer) {
         assert.that(errStartContainer).is.null();
 
-        dockWorker.getLogs(settings.containerName, function (err, stream) {
-          assert.that(err).is.null();
+        dockWorker.getLogs(settings.containerName, function (errGetLogs, stream) {
+          assert.that(errGetLogs).is.null();
           stream.on('data', function (data) {
             if (data.toString().indexOf('Test container running...') !== -1) {
-              dockWorker.stopContainer(settings.containerName, function (err) {
-                assert.that(err).is.null();
+              dockWorker.stopContainer(settings.containerName, function (errStopContainer) {
+                assert.that(errStopContainer).is.null();
                 stream.removeAllListeners();
                 done();
               });
