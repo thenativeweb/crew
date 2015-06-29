@@ -710,16 +710,15 @@ suite('DockWorker', function () {
       }, function (errStartContainer) {
         assert.that(errStartContainer).is.null();
 
-        dockWorker.getLogs(settings.containerName, function (errGetLogs, stream) {
+        dockWorker.getLogs(settings.containerName, function (errGetLogs, streamOut) {
           assert.that(errGetLogs).is.null();
-          stream.on('data', function (data) {
-            if (data.toString().indexOf('Test container running...') !== -1) {
-              dockWorker.stopContainer(settings.containerName, function (errStopContainer) {
-                assert.that(errStopContainer).is.null();
-                stream.removeAllListeners();
-                done();
-              });
-            }
+          streamOut.once('data', function (data) {
+            assert.that(data.toString()).is.equalTo('Test container running...\n');
+            dockWorker.stopContainer(settings.containerName, function (errStopContainer) {
+              assert.that(errStopContainer).is.null();
+              streamOut.removeAllListeners();
+              done();
+            });
           });
         });
       });
