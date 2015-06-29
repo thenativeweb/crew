@@ -20,7 +20,6 @@ test:
   pre:
     - echo "DOCKER_OPTS=\"-s btrfs -e lxc -H=tcp://127.0.0.1:2376 --tlsverify --tlscacert=$DOCKER_CERT_PATH/ca.pem --tlscert=$DOCKER_CERT_PATH/server-cert.pem --tlskey=$DOCKER_CERT_PATH/server-key.pem\"" | sudo tee --append /etc/default/docker
     - sudo service docker restart
-    - docker build -t thenativeweb/crew-test .
 
   override:
     - grunt
