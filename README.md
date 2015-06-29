@@ -230,6 +230,16 @@ dockWorker.getRunningContainersFor(/^my/, function (err, containers) {
 });
 ```
 
+### Getting logs of a container
+
+To get the logs of a running container, call the `getLogs` function and provide the name of the container.
+
+```javascript
+dockWorker.getLogs('myContainer', function (err, stream) {
+  // ...
+});
+```
+
 ### Stopping a container
 
 To stop and automatically remove a running container, call the `stop` function and provide the name of the container.

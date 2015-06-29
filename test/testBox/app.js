@@ -25,3 +25,7 @@ http.createServer(function (req, res) {
   }, 0.25 * 1000);
 }).listen(process.env.PORT4 || 6000);
 /*eslint-enable no-process-env*/
+
+setTimeout(function () {
+  console.log('Test container running...');
+}, 1 * 1000);

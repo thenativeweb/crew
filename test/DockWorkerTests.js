@@ -676,6 +676,56 @@ suite('DockWorker', function () {
     });
   });
 
+  suite('getLogs', function () {
+    test('is a function.', function (done) {
+      assert.that(dockWorker.getLogs).is.ofType('function');
+      done();
+    });
+
+    test('throws an error if name is missing.', function (done) {
+      assert.that(function () {
+        dockWorker.getLogs();
+      }).is.throwing('Name is missing.');
+      done();
+    });
+
+    test('throws an error if callback is missing.', function (done) {
+      assert.that(function () {
+        dockWorker.getLogs(settings.containerName);
+      }).is.throwing('Callback is missing.');
+      done();
+    });
+
+    test('returns an error if the specified container does not exist.', function (done) {
+      dockWorker.getLogs('xxx-crew-test-xxx', function (err) {
+        assert.that(err).is.not.null();
+        done();
+      });
+    });
+
+    test('returns a stream with the logs of the specified container.', function (done) {
+      dockWorker.startContainer({
+        image: settings.image,
+        name: settings.containerName
+      }, function (errStartContainer, id) {
+        assert.that(errStartContainer).is.null();
+
+        dockWorker.getLogs(settings.containerName, function (err, stream) {
+          assert.that(err).is.null();
+          stream.on('data', function (data) {
+            if (data.toString().indexOf('Test container running...') !== -1) {
+              dockWorker.stopContainer(settings.containerName, function (err) {
+                assert.that(err).is.null();
+                stream.removeAllListeners();
+                done();
+              });
+            }
+          });
+        });
+      });
+    });
+  });
+
   suite('getRunningContainersFor', function () {
     test('is a function.', function (done) {
       assert.that(dockWorker.getRunningContainersFor).is.ofType('function');
