@@ -18,6 +18,8 @@ suite('DockWorker', function () {
   this.timeout(30 * 1000);
 
   suiteSetup(function (done) {
+    this.timeout(2 * 60 * 1000);
+
     dockWorker = new DockWorker({
       protocol: 'https',
       host: settings.host,
