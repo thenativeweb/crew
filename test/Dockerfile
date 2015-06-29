@@ -1,4 +1,4 @@
-FROM thenativeweb/node:0.10.36
+FROM iojs:2.1.0
 MAINTAINER the native web <hello@thenativeweb.io>
 
 # This is run from within the testBox directory.

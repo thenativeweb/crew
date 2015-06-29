@@ -16,6 +16,7 @@ settings.caCertificate = fs.readFileSync(path.join(process.env.DOCKER_CERT_PATH,
 /*eslint-enable no-process-env*/
 
 settings.image = 'thenativeweb/crew-test';
+settings.imageAsRegex = /^thenativeweb\//;
 settings.containerName = 'crew-test';
 
 module.exports = settings;

@@ -29,7 +29,7 @@ suite('DockWorker', function () {
       }
     });
 
-    childProcess.exec('docker kill ' + settings.containerName + '; docker rm ' + settings.containerName, function () {
+    childProcess.exec('docker rm -v $(docker kill $(docker ps -aq))', function () {
       // Intentionally ignore potential errors. Just clean up and go.
 
       childProcess.exec('docker rmi ' + settings.image, function () {
@@ -747,6 +747,67 @@ suite('DockWorker', function () {
           assert.that(errStartContainer).is.null();
 
           dockWorker.getRunningContainersFor(settings.image, function (errGetRunningContainersFor, containers) {
+            assert.that(errGetRunningContainersFor).is.null();
+            assert.that(containers.length).is.equalTo(2);
+
+            assert.that(containers[0].image).is.equalTo(settings.image);
+            assert.that(containers[0].name).is.equalTo(settings.containerName + '2');
+            assert.that(containers[0].ports.length).is.equalTo(1);
+            assert.that(containers[0].ports[0]).is.equalTo({ container: 3000, host: 3000 });
+            assert.that(containers[0].env.PORT).is.equalTo('3000');
+            assert.that(containers[0].volumes.length).is.equalTo(1);
+            assert.that(containers[0].volumes[0]).is.equalTo({ container: '/data1', host: path.join(__dirname, 'testBox', 'toBeMounted') });
+            assert.that(containers[0].links.length).is.equalTo(1);
+            assert.that(containers[0].links[0]).is.equalTo({ name: settings.containerName + '1', alias: 'foobar' });
+            assert.that(containers[0].network.hosts.length).is.equalTo(1);
+            assert.that(containers[0].network.hosts[0]).is.equalTo({ name: 'example.com', ip: '192.168.0.1' });
+
+            assert.that(containers[1].image).is.equalTo(settings.image);
+            assert.that(containers[1].name).is.equalTo(settings.containerName + '1');
+            assert.that(containers[1].ports).is.equalTo([]);
+            assert.that(containers[1].volumes).is.equalTo([]);
+            assert.that(containers[1].links).is.equalTo([]);
+            assert.that(containers[1].network.hosts).is.equalTo([]);
+
+            dockWorker.stopContainer(settings.containerName + '2', function (err) {
+              assert.that(err).is.null();
+              dockWorker.stopContainer(settings.containerName + '1', done);
+            });
+          });
+        });
+      });
+    });
+
+    test('returns an array of containers for a regular expression.', function (done) {
+      dockWorker.startContainer({
+        image: settings.image,
+        name: settings.containerName + '1'
+      }, function (errStartContainer1) {
+        assert.that(errStartContainer1).is.null();
+        dockWorker.startContainer({
+          image: settings.image,
+          name: settings.containerName + '2',
+          ports: [
+            { container: 3000, host: 3000 }
+          ],
+          env: {
+            port: 3000
+          },
+          volumes: [
+            { container: '/data1', host: path.join(__dirname, 'testBox', 'toBeMounted') }
+          ],
+          links: [
+            { name: settings.containerName + '1', alias: 'foobar' }
+          ],
+          network: {
+            hosts: [
+              { name: 'example.com', ip: '192.168.0.1' }
+            ]
+          }
+        }, function (errStartContainer) {
+          assert.that(errStartContainer).is.null();
+
+          dockWorker.getRunningContainersFor(settings.imageAsRegex, function (errGetRunningContainersFor, containers) {
             assert.that(errGetRunningContainersFor).is.null();
             assert.that(containers.length).is.equalTo(2);
 

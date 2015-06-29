@@ -222,6 +222,14 @@ dockWorker.getRunningContainersFor('my-image', function (err, containers) {
 });
 ```
 
+Alternatively you may specify the image name by a regular expression.
+
+```javascript
+dockWorker.getRunningContainersFor(/^my/, function (err, containers) {
+  // ...
+});
+```
+
 ### Stopping a container
 
 To stop and automatically remove a running container, call the `stop` function and provide the name of the container.
