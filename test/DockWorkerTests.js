@@ -273,7 +273,7 @@ suite('DockWorker', function () {
         image: settings.image,
         name: settings.containerName
       }, function (err, id) {
-        childProcess.exec('docker kill ' + id + ' && docker rm ' + id, function (childProcessErr) {
+        childProcess.exec('docker kill -f ' + id + ' && docker rm -f ' + id, function (childProcessErr) {
           assert.that(childProcessErr).is.null();
           assert.that(err).is.null();
           done();
@@ -311,7 +311,7 @@ suite('DockWorker', function () {
                 }), function (errGet2) {
                   assert.that(errGet2).is.not.null();
 
-                  childProcess.exec('docker kill ' + id + ' && docker rm ' + id, function (err) {
+                  childProcess.exec('docker kill -f ' + id + ' && docker rm -f ' + id, function (err) {
                     assert.that(err).is.null();
                     done();
                   });
@@ -353,7 +353,7 @@ suite('DockWorker', function () {
                   assert.that(errGet2).is.null();
                   assert.that(res2.statusCode).is.equalTo(200);
 
-                  childProcess.exec('docker kill ' + id + ' && docker rm ' + id, function (err) {
+                  childProcess.exec('docker kill -f ' + id + ' && docker rm -f ' + id, function (err) {
                     assert.that(err).is.null();
                     done();
                   });
@@ -379,7 +379,7 @@ suite('DockWorker', function () {
           knock.at(settings.host, 3000, function (err) {
             assert.that(err).is.null();
 
-            childProcess.exec('docker kill ' + id + ' && docker rm ' + id, function (childProcessErr) {
+            childProcess.exec('docker kill -f ' + id + ' && docker rm -f ' + id, function (childProcessErr) {
               assert.that(childProcessErr).is.null();
               done();
             });
@@ -404,7 +404,7 @@ suite('DockWorker', function () {
             knock.at(settings.host, 5000, function (err) {
               assert.that(err).is.null();
 
-              childProcess.exec('docker kill ' + id + ' && docker rm ' + id, function (childProcessErr) {
+              childProcess.exec('docker kill -f ' + id + ' && docker rm -f ' + id, function (childProcessErr) {
                 assert.that(childProcessErr).is.null();
                 done();
               });
@@ -431,7 +431,7 @@ suite('DockWorker', function () {
           knock.at(settings.host, 9999, function (errAt) {
             assert.that(errAt).is.null();
 
-            childProcess.exec('docker kill ' + id + ' && docker rm ' + id, function (err) {
+            childProcess.exec('docker kill -f ' + id + ' && docker rm -f ' + id, function (err) {
               assert.that(err).is.null();
               done();
             });
@@ -460,7 +460,7 @@ suite('DockWorker', function () {
             knock.at(settings.host, 9998, function (errAt2) {
               assert.that(errAt2).is.null();
 
-              childProcess.exec('docker kill ' + id + ' && docker rm ' + id, function (err) {
+              childProcess.exec('docker kill -f ' + id + ' && docker rm -f ' + id, function (err) {
                 assert.that(err).is.null();
                 done();
               });
@@ -495,7 +495,7 @@ suite('DockWorker', function () {
               assert.that(res.statusCode).is.equalTo(200);
               assert.that(body).is.equalTo('foobar\n');
 
-              childProcess.exec('docker kill ' + id + ' && docker rm ' + id, function (err) {
+              childProcess.exec('docker kill -f ' + id + ' && docker rm -f ' + id, function (err) {
                 assert.that(err).is.null();
                 done();
               });
@@ -540,7 +540,7 @@ suite('DockWorker', function () {
                 assert.that(res.statusCode).is.equalTo(200);
                 assert.that(body).is.equalTo('foobar\n');
 
-                childProcess.exec('docker kill ' + id + ' && docker rm ' + id, function (err) {
+                childProcess.exec('docker kill -f ' + id + ' && docker rm -f ' + id, function (err) {
                   assert.that(err).is.null();
                   done();
                 });
@@ -627,7 +627,7 @@ suite('DockWorker', function () {
               assert.that(/^192\.168\.59\.103\s+local\.wolkenkit\.io$/gm.test(bodyGet)).is.true();
               assert.that(/^192\.168\.59\.104\s+auth\.wolkenkit\.io$/gm.test(bodyGet)).is.true();
 
-              childProcess.exec('docker kill ' + id + ' && docker rm ' + id, function (err) {
+              childProcess.exec('docker kill -f ' + id + ' && docker rm -f ' + id, function (err) {
                 assert.that(err).is.null();
                 done();
               });
