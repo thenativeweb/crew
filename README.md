@@ -79,6 +79,19 @@ dockWorker.buildImage({
 });
 ```
 
+If you want to exclude some files from the newly built image, you can use the `dockerignore` property to provide the path to an ignore file.
+
+```javascript
+dockWorker.buildImage({
+  directory: __dirname,
+  dockerfile: path.join(__dirname, 'my-dockerfile'),
+  dockerignore: path.join(__dirname, 'my-dockerignore'),
+  name: 'myImage'
+}, function (err) {
+  // ...
+});
+```
+
 ### Starting a container
 
 To create and start a container, call the `start` function and provide the name of the image and the desired container name. This returns the newly created container's id.

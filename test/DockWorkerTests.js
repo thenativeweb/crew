@@ -208,6 +208,86 @@ suite('DockWorker', function () {
       });
     });
 
+    test('include all files if no .dockerignore file is given.', function (done) {
+      var name = uuid();
+
+      dockWorker.buildImage({
+        directory: path.join(__dirname, 'testBox'),
+        dockerfile: path.join(__dirname, 'Dockerfile'),
+        name: name
+      }, function (errBuildImage) {
+        assert.that(errBuildImage).is.null();
+
+        dockWorker.startContainer({
+          image: name,
+          name: settings.containerName,
+          ports: [
+            { container: 7000, host: 7000 }
+          ]
+        }, function (errStartContainer, id) {
+          assert.that(errStartContainer).is.null();
+
+          setTimeout(function () {
+            request.get(url.format({
+              protocol: 'http',
+              hostname: settings.host,
+              port: 7000,
+              pathname: '/'
+            }), function (errGet, res) {
+              assert.that(errGet).is.null();
+              assert.that(res.statusCode).is.equalTo(200);
+              assert.that(res.body).is.equalTo('to-be-ignored\n');
+
+              childProcess.exec('docker kill ' + id + ' && docker rm -f ' + id, function (err) {
+                assert.that(err).is.null();
+                done();
+              });
+            });
+          }, 1.5 * 1000);
+        });
+      });
+    });
+
+    test('excludes files specified in .dockerignore file.', function (done) {
+      var name = uuid();
+
+      dockWorker.buildImage({
+        directory: path.join(__dirname, 'testBox'),
+        dockerfile: path.join(__dirname, 'Dockerfile'),
+        dockerignore: path.join(__dirname, '_dockerignore'),
+        name: name
+      }, function (errBuildImage) {
+        assert.that(errBuildImage).is.null();
+
+        dockWorker.startContainer({
+          image: name,
+          name: settings.containerName,
+          ports: [
+            { container: 7000, host: 7000 }
+          ]
+        }, function (errStartContainer, id) {
+          assert.that(errStartContainer).is.null();
+
+          setTimeout(function () {
+            request.get(url.format({
+              protocol: 'http',
+              hostname: settings.host,
+              port: 7000,
+              pathname: '/'
+            }), function (errGet, res) {
+              assert.that(errGet).is.null();
+              assert.that(res.statusCode).is.equalTo(404);
+
+              childProcess.exec('docker kill ' + id + ' && docker rm -f ' + id, function (err) {
+                assert.that(err).is.null();
+                done();
+              });
+            });
+          }, 1.5 * 1000);
+        });
+      });
+    });
+
     test('returns an error if the image can not be built.', function (done) {
       var name = uuid();
 
@@ -316,9 +396,9 @@ suite('DockWorker', function () {
                     done();
                   });
                 });
-              }, 0.5 * 1000);
+              }, 1.5 * 1000);
             });
-          }, 0.5 * 1000);
+          }, 1.5 * 1000);
         });
       });
 
@@ -358,9 +438,9 @@ suite('DockWorker', function () {
                     done();
                   });
                 });
-              }, 0.5 * 1000);
+              }, 1.5 * 1000);
             });
-          }, 0.5 * 1000);
+          }, 1.5 * 1000);
         });
       });
     });
@@ -696,7 +776,7 @@ suite('DockWorker', function () {
       done();
     });
 
-    test('returns an error if the specified container does not exist.', function (done) {
+    test.skip('returns an error if the specified container does not exist.', function (done) {
       dockWorker.getLogs('xxx-crew-test-xxx', function (err) {
         assert.that(err).is.not.null();
         done();
