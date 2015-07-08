@@ -46,6 +46,19 @@ suite('DockWorker', function () {
     });
   });
 
+  suite('options', function () {
+    test('contains the options that were set within the constructor.', function (done) {
+      assert.that(dockWorker.options).is.ofType('object');
+      assert.that(dockWorker.options.protocol).is.equalTo('https');
+      assert.that(dockWorker.options.host).is.equalTo(settings.host);
+      assert.that(dockWorker.options.port).is.equalTo(settings.port);
+      assert.that(dockWorker.options.keys.privateKey).is.not.undefined();
+      assert.that(dockWorker.options.keys.certificate).is.not.undefined();
+      assert.that(dockWorker.options.keys.caCertificate).is.not.undefined();
+      done();
+    });
+  });
+
   suite('ping', function () {
     test('is a function.', function (done) {
       assert.that(dockWorker.ping).is.ofType('function');

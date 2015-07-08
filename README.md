@@ -32,6 +32,8 @@ crew({
 });
 ```
 
+Please note that the initially provided options are available at `dockWorker.options`.
+
 ### Pinging Docker
 
 To ping the Docker server, use the `ping` function.
