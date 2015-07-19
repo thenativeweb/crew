@@ -789,7 +789,7 @@ suite('DockWorker', function () {
       done();
     });
 
-    test.skip('returns an error if the specified container does not exist.', function (done) {
+    test('returns an error if the specified container does not exist.', function (done) {
       dockWorker.getLogs('xxx-crew-test-xxx', function (err) {
         assert.that(err).is.not.null();
         done();
