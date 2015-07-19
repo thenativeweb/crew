@@ -1,6 +1,6 @@
 {
   "name": "crew",
-  "version": "0.7.6",
+  "version": "0.7.7",
   "description": "crew makes managing Docker a breeze.",
   "contributors": [
     {
