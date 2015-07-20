@@ -94,6 +94,27 @@ dockWorker.buildImage({
 });
 ```
 
+If you want to modify the build context right before the image gets built, register a `preBuild` hook and do whatever you want to do.
+
+```javascript
+dockWorker.buildImage({
+  directory: __dirname,
+  dockerfile: path.join(__dirname, 'my-dockerfile'),
+  dockerignore: path.join(__dirname, 'my-dockerignore'),
+  preBuild: function (preBuildOptions, done) {
+    console.log(preBuildOptions);
+    // => {
+    //      directory: '...'
+    //    }
+
+    done(null);
+  },
+  name: 'myImage'
+}, function (err) {
+  // ...
+});
+```
+
 ### Starting a container
 
 To create and start a container, call the `start` function and provide the name of the image and the desired container name. This returns the newly created container's id.

@@ -17,7 +17,7 @@
     "del": "1.2.0",
     "dockerode": "2.2.2",
     "fs-extra": "0.22.1",
-    "isolated": "0.2.1",
+    "isolated": "0.3.0",
     "lodash": "3.10.0",
     "q": "1.4.1",
     "tar-fs": "1.7.0"
@@ -26,7 +26,7 @@
     "assertthat": "0.6.0",
     "grunt": "0.4.5",
     "knockat": "0.2.1",
-    "request": "2.58.0",
+    "request": "2.59.0",
     "tourism": "0.20.2",
     "uuidv4": "0.3.1"
   },

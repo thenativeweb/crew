@@ -5,6 +5,7 @@ var childProcess = require('child_process'),
     url = require('url');
 
 var assert = require('assertthat'),
+    fs = require('fs-extra'),
     knock = require('knockat'),
     request = require('request'),
     uuid = require('uuidv4');
@@ -290,6 +291,54 @@ suite('DockWorker', function () {
             }), function (errGet, res) {
               assert.that(errGet).is.null();
               assert.that(res.statusCode).is.equalTo(404);
+
+              childProcess.exec('docker kill ' + id + ' && docker rm -f ' + id, function (err) {
+                assert.that(err).is.null();
+                done();
+              });
+            });
+          }, 1.5 * 1000);
+        });
+      });
+    });
+
+    test('runs the preBuild hook before building the image.', function (done) {
+      var name = uuid();
+
+      dockWorker.buildImage({
+        directory: path.join(__dirname, 'testBox'),
+        dockerfile: path.join(__dirname, 'Dockerfile'),
+        dockerignore: path.join(__dirname, '_dockerignore'),
+        name: name,
+        preBuild: function (preBuildOptions, callback) {
+          fs.copy(
+            path.join(__dirname, 'testBox', 'toBeAdded', 'toBeIgnored.txt'),
+            path.join(preBuildOptions.directory, 'toBeAdded', 'toBeIgnored.txt'),
+            callback
+          );
+        }
+      }, function (errBuildImage) {
+        assert.that(errBuildImage).is.null();
+
+        dockWorker.startContainer({
+          image: name,
+          name: settings.containerName,
+          ports: [
+            { container: 7000, host: 7000 }
+          ]
+        }, function (errStartContainer, id) {
+          assert.that(errStartContainer).is.null();
+
+          setTimeout(function () {
+            request.get(url.format({
+              protocol: 'http',
+              hostname: settings.host,
+              port: 7000,
+              pathname: '/'
+            }), function (errGet, res) {
+              assert.that(errGet).is.null();
+              assert.that(res.statusCode).is.equalTo(200);
+              assert.that(res.body).is.equalTo('to-be-ignored\n');
 
               childProcess.exec('docker kill ' + id + ' && docker rm -f ' + id, function (err) {
                 assert.that(err).is.null();
