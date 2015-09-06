@@ -120,7 +120,7 @@ dockWorker.buildImage({
 To create and start a container, call the `start` function and provide the name of the image and the desired container name. This returns the newly created container's id.
 
 ```javascript
-dockWorker.start({
+dockWorker.startContainer({
   image: 'hello-world',
   name: 'myContainer'
 }, function (err, id) {
@@ -134,7 +134,7 @@ dockWorker.start({
 If you want your container to restart automatically on crashes, add the `restart` property to the parameter object and set it to `true`.
 
 ```javascript
-dockWorker.start({
+dockWorker.startContainer({
   image: 'hello-world',
   name: 'myContainer',
   restart: true
@@ -148,7 +148,7 @@ dockWorker.start({
 To forward container ports to the host, add the `ports` property to the parameter object and hand over an array of forwardings.
 
 ```javascript
-dockWorker.start({
+dockWorker.startContainer({
   image: 'hello-world',
   name: 'myContainer',
   ports: [
@@ -164,7 +164,7 @@ dockWorker.start({
 To set environment variables, add the `env` property to the parameter object and hand over the keys and values you want to use as environment variables.
 
 ```javascript
-dockWorker.start({
+dockWorker.startContainer({
   image: 'hello-world',
   name: 'myContainer',
   env: {
@@ -180,7 +180,7 @@ dockWorker.start({
 To use volumes from the host, add the `volumes` property to the parameter object and hand over an array of volume mappings.
 
 ```javascript
-dockWorker.start({
+dockWorker.startContainer({
   image: 'hello-world',
   name: 'myContainer',
   volumes: [
@@ -196,7 +196,7 @@ dockWorker.start({
 To link a container to another one, add the `links` property to the parameter object and hand over an array of link mappings.
 
 ```javascript
-dockWorker.start({
+dockWorker.startContainer({
   image: 'hello-world',
   name: 'myContainer',
   links: [
@@ -212,7 +212,7 @@ dockWorker.start({
 To add extra hosts to the container's `/etc/hosts` file, add the `network` property to the parameter object and assign a `hosts` property to it.
 
 ```javascript
-dockWorker.start({
+dockWorker.startContainer({
   image: 'hello-world',
   name: 'myContainer',
   network: {
@@ -281,7 +281,7 @@ dockWorker.getLogs('myContainer', function (err, stdOut, stdErr) {
 To stop and automatically remove a running container, call the `stop` function and provide the name of the container.
 
 ```javascript
-dockWorker.stop('myContainer', function (err) {
+dockWorker.stopContainer('myContainer', function (err) {
   // ...
 });
 ```
