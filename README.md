@@ -62,7 +62,7 @@ Please note that verification does not respect tags, i.e. if *any* version of th
 To download an image to the Docker server, use the `download` function and provide the name of the image. If you want to download a specific version, add the tag to the name of the image.
 
 ```javascript
-dockWorker.download('hello-world', function (err) {
+dockWorker.downloadImage('hello-world', function (err) {
   // ...
 });
 ```
