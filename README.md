@@ -117,7 +117,7 @@ dockWorker.buildImage({
 
 ### Starting a container
 
-To create and start a container, call the `start` function and provide the name of the image and the desired container name. This returns the newly created container's id.
+To create and start a container, call the `startContainer` function and provide the name of the image and the desired container name. This returns the newly created container's id.
 
 ```javascript
 dockWorker.startContainer({
@@ -278,7 +278,7 @@ dockWorker.getLogs('myContainer', function (err, stdOut, stdErr) {
 
 ### Stopping a container
 
-To stop and automatically remove a running container, call the `stop` function and provide the name of the container.
+To stop and automatically remove a running container, call the `stopContainer` function and provide the name of the container.
 
 ```javascript
 dockWorker.stopContainer('myContainer', function (err) {
