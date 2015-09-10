@@ -140,8 +140,37 @@ suite('DockWorker', function () {
 
     test('does not return an error if the specified image was downloaded.', function (done) {
       dockWorker.downloadImage('hello-world', function (err) {
+        console.log('download error', err)
         assert.that(err).is.null();
         done();
+      });
+    });
+
+    test('downloads latest if no tag is specified', function (done) {
+      dockWorker.downloadImage('hello-world', function (err) {
+        assert.that(err).is.null();
+        dockWorker.hasImage('hello-world', function (errHasImage, hasImage) {
+          assert.that(errHasImage).is.null();
+          assert.that(hasImage).is.true();
+          childProcess.exec('docker rmi -f ' + 'hello-world:latest', function (errRemoveImage) {
+            assert.that(errRemoveImage).is.null();
+            done();
+          });
+        });
+      });
+    });
+
+    test('downloads specified image if tag is specified', function (done) {
+      dockWorker.downloadImage('busybox', "ubuntu-14.04", function (err) {
+        assert.that(err).is.null();
+        dockWorker.hasImage('busybox', "ubuntu-14.04", function (errHasImage, hasImage) {
+          assert.that(errHasImage).is.null();
+          assert.that(hasImage).is.true();
+          childProcess.exec('docker rmi -f ' + 'busybox:ubuntu-14.04', function (errRemoveImage) {
+            assert.that(errRemoveImage).is.null();
+            done();
+          });
+        });
       });
     });
   });
