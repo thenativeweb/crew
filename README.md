@@ -81,6 +81,19 @@ dockWorker.buildImage({
 });
 ```
 
+`buildImage` also supports tags fors images by passing in the optional `tag` option:
+
+```javascript
+dockWorker.buildImage({
+  directory: __dirname,
+  dockerfile: path.join(__dirname, 'my-dockerfile'),
+  name: 'myImage',
+  tag: '0.1.0'
+}, function (err) {
+  // ...
+});
+```
+
 If you want to exclude some files from the newly built image, you can use the `dockerignore` property to provide the path to an ignore file.
 
 ```javascript
