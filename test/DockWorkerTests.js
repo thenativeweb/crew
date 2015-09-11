@@ -272,6 +272,30 @@ suite('DockWorker', function () {
       });
     });
 
+    test('builds an image by name and tag.', function (done) {
+      var name = uuid();
+      var tag = '0.1.0';
+
+      dockWorker.buildImage({
+        directory: path.join(__dirname, 'testBox'),
+        dockerfile: path.join(__dirname, 'Dockerfile'),
+        name: name,
+        tag: tag
+      }, function (errBuildImage) {
+        assert.that(errBuildImage).is.null();
+
+        dockWorker.hasImage(name, tag, function (errHasImage, hasImage) {
+          assert.that(errHasImage).is.null();
+          assert.that(hasImage).is.true();
+
+          childProcess.exec('docker rmi -f ' + name + ':' + tag, function (errRemoveImage) {
+            assert.that(errRemoveImage).is.null();
+            done();
+          });
+        });
+      });
+    });
+
     test('include all files if no .dockerignore file is given.', function (done) {
       var name = uuid();
 
