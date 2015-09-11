@@ -102,6 +102,28 @@ suite('DockWorker', function () {
       });
     });
 
+    test('returns true if the image specified by name and tag is available.', function (done) {
+      var name = uuid();
+      var tag = '0.1.0';
+
+      dockWorker.buildImage({
+        directory: path.join(__dirname, 'testBox'),
+        dockerfile: path.join(__dirname, 'Dockerfile'),
+        name: name,
+        tag: tag
+      }, function (err) {
+        assert.that(err).is.null();
+        dockWorker.hasImage(name, tag, function (errHasImage, hasImage) {
+          assert.that(errHasImage).is.null();
+          assert.that(hasImage).is.true();
+          childProcess.exec('docker rmi -f ' + name + ':' + tag, function (errRemoveImage) {
+            assert.that(errRemoveImage).is.null();
+            done();
+          });
+        });
+      });
+    });
+
     test('returns false if the specified image is not available.', function (done) {
       dockWorker.hasImage('thenativeweb/xxx-crew-test-xxx', function (err, hasImage) {
         assert.that(err).is.null();
