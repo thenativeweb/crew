@@ -55,6 +55,15 @@ dockWorker.hasImage('hello-world', function (err, hasImage) {
 });
 ```
 
+`hasImage` also supports tags to check for a particular version of an image:
+
+```javascript
+dockWorker.hasImage('busybox', 'ubuntu-14.04', function (err, hasImage) {
+  console.log(hasImage); // => true
+  // ...
+});
+```
+
 Please note that verification does not respect tags, i.e. if *any* version of the image is available, verification will succeed.
 
 ### Downloading an image
