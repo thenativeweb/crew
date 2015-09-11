@@ -284,6 +284,7 @@ dockWorker.getRunningContainersFor('my-image', function (err, containers) {
 ```
 
 Alternatively you may specify the image name by a regular expression.
+The image name can also contain tags in the form of `image:tag`.
 
 ```javascript
 dockWorker.getRunningContainersFor(/^my/, function (err, containers) {
