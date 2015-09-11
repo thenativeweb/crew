@@ -498,7 +498,7 @@ suite('DockWorker', function () {
     });
 
     test('does not return an error if the container was started using name and tag.', function (done) {
-      dockWorker.downloadImage('busybox', 'ubuntu-14.04', function(downloadErr) {
+      dockWorker.downloadImage('busybox', 'ubuntu-14.04', function () {
         dockWorker.startContainer({
           image: 'busybox:ubuntu-14.04',
           name: settings.containerName
@@ -510,7 +510,6 @@ suite('DockWorker', function () {
           });
         });
       });
-
     });
 
     suite('restart policy', function () {
@@ -1123,8 +1122,9 @@ suite('DockWorker', function () {
     });
 
     test('returns an array of containers for specified image and tag.', function (done) {
-      dockWorker.downloadImage('postgres', '9.4.4', function(downloadErr) {
+      dockWorker.downloadImage('postgres', '9.4.4', function () {
         var name = 'crew-postgres-' + uuid();
+
         dockWorker.startContainer({
           image: 'postgres:9.4.4',
           name: name
