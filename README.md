@@ -67,6 +67,16 @@ dockWorker.downloadImage('hello-world', function (err) {
 });
 ```
 
+`downloadImage` also supports tags:
+
+```javascript
+dockWorker.downloadImage('busybox', 'ubuntu-14.04', function (err) {
+  // ...
+});
+```
+
+If you don't specify a tag, the tag `latest` will be used which is also the default used by the Docker CLI.
+
 ### Building an image
 
 To build an image, call the `buildImage` function and provide the directory you want to use, a `Dockerfile`, and the name of the image.
