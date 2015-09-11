@@ -1121,5 +1121,23 @@ suite('DockWorker', function () {
         });
       });
     });
+
+    test('returns an array of containers for specified image and tag.', function (done) {
+      dockWorker.downloadImage('postgres', '9.4.4', function(downloadErr) {
+        var name = 'crew-postgres-' + uuid();
+        dockWorker.startContainer({
+          image: 'postgres:9.4.4',
+          name: name
+        }, function (errStartContainer) {
+          assert.that(errStartContainer).is.null();
+
+          dockWorker.getRunningContainersFor('postgres:9.4.4', function (err, containers) {
+            assert.that(err).is.null();
+            assert.that(containers.length).is.equalTo(1);
+            dockWorker.stopContainer(name, done);
+          });
+        });
+      });
+    });
   });
 });
