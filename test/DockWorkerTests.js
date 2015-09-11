@@ -497,6 +497,22 @@ suite('DockWorker', function () {
       });
     });
 
+    test('does not return an error if the container was started using name and tag.', function (done) {
+      dockWorker.downloadImage('busybox', 'ubuntu-14.04', function(downloadErr) {
+        dockWorker.startContainer({
+          image: 'busybox:ubuntu-14.04',
+          name: settings.containerName
+        }, function (err, id) {
+          childProcess.exec('docker kill ' + id + ' | true && docker rm -f ' + id, function (childProcessErr) {
+            assert.that(childProcessErr).is.null();
+            assert.that(err).is.null();
+            done();
+          });
+        });
+      });
+
+    });
+
     suite('restart policy', function () {
       test('defaults to never.', function (done) {
         dockWorker.startContainer({
