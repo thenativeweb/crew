@@ -142,6 +142,18 @@ dockWorker.startContainer({
 });
 ```
 
+`startContainer` also supports image names including tags:
+
+```javascript
+dockWorker.startContainer({
+  image: 'busybox:ubuntu-14.04',
+  name: 'myContainer'
+}, function (err, id) {
+  console.log(id); // => '70073a08b0f7fdfef44ca6fe03ba5e796d4773d9628b6f68eb7e34568dc73e1f'
+  // ...
+});
+```
+
 #### Restarting crashed containers
 
 If you want your container to restart automatically on crashes, add the `restart` property to the parameter object and set it to `true`.
