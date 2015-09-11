@@ -162,7 +162,7 @@ suite('DockWorker', function () {
     test('downloads specified image if tag is specified', function (done) {
       dockWorker.downloadImage('busybox', 'ubuntu-14.04', function (err) {
         assert.that(err).is.null();
-        dockWorker.hasImage('busybox', '"ubuntu-14.04', function (errHasImage, hasImage) {
+        dockWorker.hasImage('busybox', 'ubuntu-14.04', function (errHasImage, hasImage) {
           assert.that(errHasImage).is.null();
           assert.that(hasImage).is.true();
           childProcess.exec('docker rmi -f ' + 'busybox:ubuntu-14.04', function (errRemoveImage) {
