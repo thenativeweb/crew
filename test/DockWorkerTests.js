@@ -541,8 +541,7 @@ suite('DockWorker', function () {
                   pathname: '/'
                 }), function (errGet2) {
                   assert.that(errGet2).is.not.null();
-
-                  childProcess.exec('docker kill ' + id + ' && docker rm -f ' + id, function (err) {
+                  childProcess.exec('docker rm -f ' + id, function (err) {
                     assert.that(err).is.null();
                     done();
                   });
