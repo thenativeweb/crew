@@ -341,6 +341,15 @@ Before running the test, you need to build the `thenativeweb/crew-test` image. I
 
     $ grunt build
 
+If you're using Docker Machine, make sure to copy the crew source folder to your Docker Machine before running the tests. Assuming your Docker machine name is `default` and your local crew source folder is `/home/<yourusername>/code/crew`, the commands would look like this:
+
+```bash
+docker-machine ssh default -- mkdir -p /home/<yourusername>/code/crew
+docker-machine scp -r . default:/home/<yourusername>/code/crew
+```
+
+After this, you can run the tests using `grunt` or `grunt test`.
+
 ## License
 
 The MIT License (MIT)
