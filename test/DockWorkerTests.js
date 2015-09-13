@@ -80,22 +80,29 @@ suite('DockWorker', function () {
       done();
     });
 
-    test('throws an error if name is missing.', function (done) {
+    test('throws an error if options are missing.', function (done) {
       assert.that(function () {
         dockWorker.hasImage();
+      }).is.throwing('Options are missing.');
+      done();
+    });
+
+    test('throws an error if name is missing.', function (done) {
+      assert.that(function () {
+        dockWorker.hasImage({});
       }).is.throwing('Name is missing.');
       done();
     });
 
     test('throws an error if callback is missing.', function (done) {
       assert.that(function () {
-        dockWorker.hasImage(settings.image);
+        dockWorker.hasImage({ name: settings.image });
       }).is.throwing('Callback is missing.');
       done();
     });
 
     test('returns true if the specified image is available.', function (done) {
-      dockWorker.hasImage(settings.image, function (err, hasImage) {
+      dockWorker.hasImage({ name: settings.image }, function (err, hasImage) {
         assert.that(err).is.null();
         assert.that(hasImage).is.true();
         done();
@@ -113,7 +120,7 @@ suite('DockWorker', function () {
         tag: tag
       }, function (err) {
         assert.that(err).is.null();
-        dockWorker.hasImage(name, tag, function (errHasImage, hasImage) {
+        dockWorker.hasImage({ name: name, tag: tag }, function (errHasImage, hasImage) {
           assert.that(errHasImage).is.null();
           assert.that(hasImage).is.true();
           childProcess.exec('docker rmi -f ' + name + ':' + tag, function (errRemoveImage) {
@@ -125,7 +132,7 @@ suite('DockWorker', function () {
     });
 
     test('returns false if the specified image is not available.', function (done) {
-      dockWorker.hasImage('thenativeweb/xxx-crew-test-xxx', function (err, hasImage) {
+      dockWorker.hasImage({ name: 'thenativeweb/xxx-crew-test-xxx' }, function (err, hasImage) {
         assert.that(err).is.null();
         assert.that(hasImage).is.false();
         done();
@@ -139,38 +146,45 @@ suite('DockWorker', function () {
       done();
     });
 
-    test('throws an error if name is missing.', function (done) {
+    test('throws an error if options are missing.', function (done) {
       assert.that(function () {
         dockWorker.downloadImage();
+      }).is.throwing('Options are missing.');
+      done();
+    });
+
+    test('throws an error if name is missing.', function (done) {
+      assert.that(function () {
+        dockWorker.downloadImage({});
       }).is.throwing('Name is missing.');
       done();
     });
 
     test('throws an error if callback is missing.', function (done) {
       assert.that(function () {
-        dockWorker.downloadImage(settings.image);
+        dockWorker.downloadImage({ name: settings.image });
       }).is.throwing('Callback is missing.');
       done();
     });
 
     test('returns an error if the specified image could not be downloaded.', function (done) {
-      dockWorker.downloadImage('thenativeweb/xxx-crew-test-xxx', function (err) {
+      dockWorker.downloadImage({ name: 'thenativeweb/xxx-crew-test-xxx' }, function (err) {
         assert.that(err).is.not.null();
         done();
       });
     });
 
     test('does not return an error if the specified image was downloaded.', function (done) {
-      dockWorker.downloadImage('hello-world', function (err) {
+      dockWorker.downloadImage({ name: 'hello-world' }, function (err) {
         assert.that(err).is.null();
         done();
       });
     });
 
     test('downloads latest if no tag is specified', function (done) {
-      dockWorker.downloadImage('hello-world', function (err) {
+      dockWorker.downloadImage({ name: 'hello-world' }, function (err) {
         assert.that(err).is.null();
-        dockWorker.hasImage('hello-world', function (errHasImage, hasImage) {
+        dockWorker.hasImage({ name: 'hello-world' }, function (errHasImage, hasImage) {
           assert.that(errHasImage).is.null();
           assert.that(hasImage).is.true();
           childProcess.exec('docker rmi -f ' + 'hello-world:latest', function (errRemoveImage) {
@@ -182,9 +196,9 @@ suite('DockWorker', function () {
     });
 
     test('downloads specified image if tag is specified', function (done) {
-      dockWorker.downloadImage('busybox', 'ubuntu-14.04', function (err) {
+      dockWorker.downloadImage({ name: 'busybox', tag: 'ubuntu-14.04' }, function (err) {
         assert.that(err).is.null();
-        dockWorker.hasImage('busybox', 'ubuntu-14.04', function (errHasImage, hasImage) {
+        dockWorker.hasImage({ name: 'busybox', tag: 'ubuntu-14.04' }, function (errHasImage, hasImage) {
           assert.that(errHasImage).is.null();
           assert.that(hasImage).is.true();
           childProcess.exec('docker rmi -f ' + 'busybox:ubuntu-14.04', function (errRemoveImage) {
@@ -260,7 +274,7 @@ suite('DockWorker', function () {
       }, function (errBuildImage) {
         assert.that(errBuildImage).is.null();
 
-        dockWorker.hasImage(name, function (errHasImage, hasImage) {
+        dockWorker.hasImage({ name: name }, function (errHasImage, hasImage) {
           assert.that(errHasImage).is.null();
           assert.that(hasImage).is.true();
 
@@ -284,7 +298,7 @@ suite('DockWorker', function () {
       }, function (errBuildImage) {
         assert.that(errBuildImage).is.null();
 
-        dockWorker.hasImage(name, tag, function (errHasImage, hasImage) {
+        dockWorker.hasImage({ name: name, tag: tag }, function (errHasImage, hasImage) {
           assert.that(errHasImage).is.null();
           assert.that(hasImage).is.true();
 
@@ -434,7 +448,7 @@ suite('DockWorker', function () {
       }, function (errBuildImage) {
         assert.that(errBuildImage).is.not.null();
 
-        dockWorker.hasImage(name, function (errHasImage, hasImage) {
+        dockWorker.hasImage({ name: name }, function (errHasImage, hasImage) {
           assert.that(errHasImage).is.null();
           assert.that(hasImage).is.false();
           done();
@@ -498,9 +512,10 @@ suite('DockWorker', function () {
     });
 
     test('does not return an error if the container was started using name and tag.', function (done) {
-      dockWorker.downloadImage('busybox', 'ubuntu-14.04', function () {
+      dockWorker.downloadImage({ name: 'busybox', tag: 'ubuntu-14.04' }, function () {
         dockWorker.startContainer({
-          image: 'busybox:ubuntu-14.04',
+          image: 'busybox',
+          tag: 'ubuntu-14.04',
           name: settings.containerName
         }, function (err, id) {
           childProcess.exec('docker kill ' + id + ' | true && docker rm -f ' + id, function (childProcessErr) {
@@ -961,22 +976,29 @@ suite('DockWorker', function () {
       done();
     });
 
-    test('throws an error if name is missing.', function (done) {
+    test('throws an error if options are missing.', function (done) {
       assert.that(function () {
         dockWorker.getRunningContainersFor();
+      }).is.throwing('Options are missing.');
+      done();
+    });
+
+    test('throws an error if name is missing.', function (done) {
+      assert.that(function () {
+        dockWorker.getRunningContainersFor({});
       }).is.throwing('Name is missing.');
       done();
     });
 
     test('throws an error if callback is missing.', function (done) {
       assert.that(function () {
-        dockWorker.getRunningContainersFor(settings.image);
+        dockWorker.getRunningContainersFor({ name: settings.image });
       }).is.throwing('Callback is missing.');
       done();
     });
 
     test('returns an empty array if no containers are running.', function (done) {
-      dockWorker.getRunningContainersFor(settings.image, function (err, containers) {
+      dockWorker.getRunningContainersFor({ name: settings.image }, function (err, containers) {
         assert.that(err).is.null();
         assert.that(containers.length).is.equalTo(0);
         done();
@@ -990,7 +1012,7 @@ suite('DockWorker', function () {
       }, function (errStartContainer) {
         assert.that(errStartContainer).is.null();
 
-        dockWorker.getRunningContainersFor('xxx-thenativeweb/crew-test-xxx', function (err, containers) {
+        dockWorker.getRunningContainersFor({ name: 'xxx-thenativeweb/crew-test-xxx' }, function (err, containers) {
           assert.that(err).is.null();
           assert.that(containers.length).is.equalTo(0);
           dockWorker.stopContainer(settings.containerName, done);
@@ -1027,7 +1049,7 @@ suite('DockWorker', function () {
         }, function (errStartContainer) {
           assert.that(errStartContainer).is.null();
 
-          dockWorker.getRunningContainersFor(settings.image, function (errGetRunningContainersFor, containers) {
+          dockWorker.getRunningContainersFor({ name: settings.image }, function (errGetRunningContainersFor, containers) {
             assert.that(errGetRunningContainersFor).is.null();
             assert.that(containers.length).is.equalTo(2);
 
@@ -1088,7 +1110,7 @@ suite('DockWorker', function () {
         }, function (errStartContainer) {
           assert.that(errStartContainer).is.null();
 
-          dockWorker.getRunningContainersFor(settings.imageAsRegex, function (errGetRunningContainersFor, containers) {
+          dockWorker.getRunningContainersFor({ name: settings.imageAsRegex }, function (errGetRunningContainersFor, containers) {
             assert.that(errGetRunningContainersFor).is.null();
             assert.that(containers.length).is.equalTo(2);
 
@@ -1121,7 +1143,7 @@ suite('DockWorker', function () {
     });
 
     test('returns an array of containers for specified image and tag.', function (done) {
-      dockWorker.downloadImage('postgres', '9.4.4', function () {
+      dockWorker.downloadImage({ name: 'postgres', tag: '9.4.4' }, function () {
         var name = 'crew-postgres-' + uuid();
 
         dockWorker.startContainer({
@@ -1130,7 +1152,7 @@ suite('DockWorker', function () {
         }, function (errStartContainer) {
           assert.that(errStartContainer).is.null();
 
-          dockWorker.getRunningContainersFor('postgres:9.4.4', function (err, containers) {
+          dockWorker.getRunningContainersFor({ name: 'postgres', tag: '9.4.4' }, function (err, containers) {
             assert.that(err).is.null();
             assert.that(containers.length).is.equalTo(1);
             dockWorker.stopContainer(name, done);
