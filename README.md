@@ -49,7 +49,7 @@ dockWorker.ping(function (err) {
 If you need to verify whether an image is available on the Docker server, use the `hasImage` function and provide the name of the image.
 
 ```javascript
-dockWorker.hasImage('hello-world', function (err, hasImage) {
+dockWorker.hasImage({ name: 'hello-world' }, function (err, hasImage) {
   console.log(hasImage); // => true
   // ...
 });
@@ -58,7 +58,7 @@ dockWorker.hasImage('hello-world', function (err, hasImage) {
 `hasImage` also supports tags to check for a particular version of an image:
 
 ```javascript
-dockWorker.hasImage('busybox', 'ubuntu-14.04', function (err, hasImage) {
+dockWorker.hasImage({ name: 'busybox', tag: 'ubuntu-14.04' }, function (err, hasImage) {
   console.log(hasImage); // => true
   // ...
 });
@@ -71,7 +71,7 @@ Please note that verification does not respect tags, i.e. if *any* version of th
 To download an image to the Docker server, use the `downloadImage` function and provide the name of the image. If you want to download a specific version, add the tag to the name of the image.
 
 ```javascript
-dockWorker.downloadImage('hello-world', function (err) {
+dockWorker.downloadImage({ name: 'hello-world' }, function (err) {
   // ...
 });
 ```
@@ -79,7 +79,7 @@ dockWorker.downloadImage('hello-world', function (err) {
 `downloadImage` also supports tags:
 
 ```javascript
-dockWorker.downloadImage('busybox', 'ubuntu-14.04', function (err) {
+dockWorker.downloadImage({ name: 'busybox', tag: 'ubuntu-14.04' }, function (err) {
   // ...
 });
 ```
@@ -165,7 +165,8 @@ dockWorker.startContainer({
 
 ```javascript
 dockWorker.startContainer({
-  image: 'busybox:ubuntu-14.04',
+  image: 'busybox',
+  tag: ':ubuntu-14.04',
   name: 'myContainer'
 }, function (err, id) {
   console.log(id); // => '70073a08b0f7fdfef44ca6fe03ba5e796d4773d9628b6f68eb7e34568dc73e1f'
@@ -274,7 +275,7 @@ dockWorker.startContainer({
 To get information on running containers for a specific image, use the `getRunningContainersFor` function and provide the image name.
 
 ```javascript
-dockWorker.getRunningContainersFor('my-image', function (err, containers) {
+dockWorker.getRunningContainersFor({ name: 'my-image' }, function (err, containers) {
   console.log(containers);
   // => [
   //      {
@@ -303,7 +304,7 @@ dockWorker.getRunningContainersFor('my-image', function (err, containers) {
 ```
 
 Alternatively you may specify the image name by a regular expression.
-The image name can also contain tags in the form of `image:tag`.
+The options can also contain tags in the form of `{ name: 'imagename', tag: 'tag' }`.
 
 ```javascript
 dockWorker.getRunningContainersFor(/^my/, function (err, containers) {
