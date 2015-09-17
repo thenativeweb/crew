@@ -343,10 +343,6 @@ This module can be built using [Grunt](http://gruntjs.com/). Besides running the
 
     $ grunt
 
-Before running the test, you need to build the `thenativeweb/crew-test` image. It is included in this repository. To build it, run the following command.
-
-    $ grunt build
-
 If you're using Docker Machine, make sure to copy the crew source folder to your Docker Machine before running the tests. Assuming your Docker machine name is `dev` and you're in the `crew` source folder on your local machine run the following commands.
 
 ```bash

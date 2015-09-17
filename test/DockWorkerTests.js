@@ -503,8 +503,8 @@ suite('DockWorker', function () {
         image: settings.image,
         name: settings.containerName
       }, function (err, id) {
-        childProcess.exec('docker kill ' + id + ' && docker rm -f ' + id, function (childProcessErr) {
-          assert.that(childProcessErr).is.null();
+        childProcess.exec('docker kill ' + id + ' && docker rm -f ' + id, function (errChildProcess) {
+          assert.that(errChildProcess).is.null();
           assert.that(err).is.null();
           done();
         });
@@ -518,8 +518,8 @@ suite('DockWorker', function () {
           tag: 'ubuntu-14.04',
           name: settings.containerName
         }, function (err, id) {
-          childProcess.exec('docker kill ' + id + ' | true && docker rm -f ' + id, function (childProcessErr) {
-            assert.that(childProcessErr).is.null();
+          childProcess.exec('docker kill ' + id + ' | true && docker rm -f ' + id, function (errChildProcess) {
+            assert.that(errChildProcess).is.null();
             assert.that(err).is.null();
             done();
           });
@@ -624,8 +624,8 @@ suite('DockWorker', function () {
           knock.at(settings.host, 3000, function (err) {
             assert.that(err).is.null();
 
-            childProcess.exec('docker kill ' + id + ' && docker rm -f ' + id, function (childProcessErr) {
-              assert.that(childProcessErr).is.null();
+            childProcess.exec('docker kill ' + id + ' && docker rm -f ' + id, function (errChildProcess) {
+              assert.that(errChildProcess).is.null();
               done();
             });
           });
@@ -649,8 +649,8 @@ suite('DockWorker', function () {
             knock.at(settings.host, 5000, function (err) {
               assert.that(err).is.null();
 
-              childProcess.exec('docker kill ' + id + ' && docker rm -f ' + id, function (childProcessErr) {
-                assert.that(childProcessErr).is.null();
+              childProcess.exec('docker kill ' + id + ' && docker rm -f ' + id, function (errChildProcess) {
+                assert.that(errChildProcess).is.null();
                 done();
               });
             });
@@ -911,8 +911,8 @@ suite('DockWorker', function () {
     });
 
     test('does not return an error if the specified container was stopped.', function (done) {
-      childProcess.exec('docker run -d --name ' + settings.containerName + ' ' + settings.image, function (childProcessErr) {
-        assert.that(childProcessErr).is.null();
+      childProcess.exec('docker run -d --name ' + settings.containerName + ' ' + settings.image, function (errChildProcess) {
+        assert.that(errChildProcess).is.null();
         dockWorker.stopContainer(settings.containerName, function (err) {
           assert.that(err).is.null();
           done();
