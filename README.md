@@ -11,7 +11,7 @@ crew makes managing Docker a breeze.
 First you need to add a reference to crew to to your application.
 
 ```javascript
-var crew = require('crew');
+const crew = require('crew');
 ```
 
 To connect to a Docker server, call the `crew` function and provide the hostname as well as the port. Additionally, you need to provide a private key and a certificate for client-side authentication, and a CA certificate for server-side authentication.
@@ -27,7 +27,7 @@ crew({
     certificate: fs.readFileSync(path.join(process.env.DOCKER_CERT_PATH, 'cert.pem')),
     caCertificate: fs.readFileSync(path.join(process.env.DOCKER_CERT_PATH, 'ca.pem'))
   }
-}, function (err, dockWorker) {
+}, (err, dockWorker) => {
   // ...
 });
 ```
@@ -39,7 +39,7 @@ Please note that the initially provided options are available at `dockWorker.opt
 To ping the Docker server, use the `ping` function.
 
 ```javascript
-dockWorker.ping(function (err) {
+dockWorker.ping(err => {
   // ...
 });
 ```
@@ -49,37 +49,35 @@ dockWorker.ping(function (err) {
 If you need to verify whether an image is available on the Docker server, use the `hasImage` function and provide the name of the image.
 
 ```javascript
-dockWorker.hasImage({ name: 'hello-world' }, function (err, hasImage) {
+dockWorker.hasImage({ name: 'node' }, (err, hasImage) => {
   console.log(hasImage); // => true
   // ...
 });
 ```
 
-`hasImage` also supports tags to check for a particular version of an image:
+`hasImage` also supports tags to check for a particular version of an image, as in the following example.
 
 ```javascript
-dockWorker.hasImage({ name: 'busybox', tag: 'ubuntu-14.04' }, function (err, hasImage) {
+dockWorker.hasImage({ name: 'node', tag: '4.0' }, (err, hasImage) => {
   console.log(hasImage); // => true
   // ...
 });
 ```
-
-Please note that verification does not respect tags, i.e. if *any* version of the image is available, verification will succeed.
 
 ### Downloading an image
 
-To download an image to the Docker server, use the `downloadImage` function and provide the name of the image. If you want to download a specific version, add the tag to the name of the image.
+To download an image to the Docker server, use the `downloadImage` function and provide the name of the image.
 
 ```javascript
-dockWorker.downloadImage({ name: 'hello-world' }, function (err) {
+dockWorker.downloadImage({ name: 'node' }, err => {
   // ...
 });
 ```
 
-`downloadImage` also supports tags:
+ If you want to download a specific version, add the tag to the name of the image.
 
 ```javascript
-dockWorker.downloadImage({ name: 'busybox', tag: 'ubuntu-14.04' }, function (err) {
+dockWorker.downloadImage({ name: 'node', tag: '4.0' }, err => {
   // ...
 });
 ```
@@ -95,12 +93,12 @@ dockWorker.buildImage({
   directory: __dirname,
   dockerfile: path.join(__dirname, 'my-dockerfile'),
   name: 'myImage'
-}, function (err) {
+}, err => {
   // ...
 });
 ```
 
-`buildImage` also supports tags fors images by passing in the optional `tag` option:
+`buildImage` also supports tags fors images by passing in the optional `tag` option.
 
 ```javascript
 dockWorker.buildImage({
@@ -108,7 +106,7 @@ dockWorker.buildImage({
   dockerfile: path.join(__dirname, 'my-dockerfile'),
   name: 'myImage',
   tag: '0.1.0'
-}, function (err) {
+}, err => {
   // ...
 });
 ```
@@ -121,7 +119,7 @@ dockWorker.buildImage({
   dockerfile: path.join(__dirname, 'my-dockerfile'),
   dockerignore: path.join(__dirname, 'my-dockerignore'),
   name: 'myImage'
-}, function (err) {
+}, err => {
   // ...
 });
 ```
@@ -133,7 +131,7 @@ dockWorker.buildImage({
   directory: __dirname,
   dockerfile: path.join(__dirname, 'my-dockerfile'),
   dockerignore: path.join(__dirname, 'my-dockerignore'),
-  preBuild: function (preBuildOptions, done) {
+  preBuild: (preBuildOptions, done) => {
     console.log(preBuildOptions);
     // => {
     //      directory: '...'
@@ -142,7 +140,7 @@ dockWorker.buildImage({
     done(null);
   },
   name: 'myImage'
-}, function (err) {
+}, err => {
   // ...
 });
 ```
@@ -153,22 +151,22 @@ To create and start a container, call the `startContainer` function and provide 
 
 ```javascript
 dockWorker.startContainer({
-  image: 'hello-world',
+  image: 'node',
   name: 'myContainer'
-}, function (err, id) {
+}, (err, id) => {
   console.log(id); // => '70073a08b0f7fdfef44ca6fe03ba5e796d4773d9628b6f68eb7e34568dc73e1f'
   // ...
 });
 ```
 
-`startContainer` also supports image names including tags:
+`startContainer` also supports image tags.
 
 ```javascript
 dockWorker.startContainer({
-  image: 'busybox',
-  tag: ':ubuntu-14.04',
+  image: 'node',
+  tag: '4.0',
   name: 'myContainer'
-}, function (err, id) {
+}, (err, id) => {
   console.log(id); // => '70073a08b0f7fdfef44ca6fe03ba5e796d4773d9628b6f68eb7e34568dc73e1f'
   // ...
 });
@@ -180,10 +178,10 @@ If you want your container to restart automatically on crashes, add the `restart
 
 ```javascript
 dockWorker.startContainer({
-  image: 'hello-world',
+  image: 'node',
   name: 'myContainer',
   restart: true
-}, function (err, id) {
+}, (err, id) => {
   // ...
 });
 ```
@@ -194,12 +192,12 @@ To forward container ports to the host, add the `ports` property to the paramete
 
 ```javascript
 dockWorker.startContainer({
-  image: 'hello-world',
+  image: 'node',
   name: 'myContainer',
   ports: [
     { container: 3000, host: 80 }
   ]
-}, function (err, id) {
+}, (err, id) => {
   // ...
 });
 ```
@@ -210,12 +208,12 @@ To set environment variables, add the `env` property to the parameter object and
 
 ```javascript
 dockWorker.startContainer({
-  image: 'hello-world',
+  image: 'node',
   name: 'myContainer',
   env: {
     port: 3000
   }
-}, function (err, id) {
+}, (err, id) => {
   // ...
 });
 ```
@@ -226,12 +224,12 @@ To use volumes from the host, add the `volumes` property to the parameter object
 
 ```javascript
 dockWorker.startContainer({
-  image: 'hello-world',
+  image: 'node',
   name: 'myContainer',
   volumes: [
     { container: '/data', host: '/home/janedoe/foo' }
   ]
-}, function (err, id) {
+}, (err, id) => {
   // ...
 });
 ```
@@ -242,12 +240,12 @@ To link a container to another one, add the `links` property to the parameter ob
 
 ```javascript
 dockWorker.startContainer({
-  image: 'hello-world',
+  image: 'node',
   name: 'myContainer',
   links: [
     { name: 'mongodb', alias: 'db' }
   ]
-}, function (err, id) {
+}, (err, id) => {
   // ...
 });
 ```
@@ -258,14 +256,14 @@ To add extra hosts to the container's `/etc/hosts` file, add the `network` prope
 
 ```javascript
 dockWorker.startContainer({
-  image: 'hello-world',
+  image: 'node',
   name: 'myContainer',
   network: {
     hosts: [
       { name: 'example.com', ip: '192.168.0.1' }
     ]
   }
-}, function (err, id) {
+}, (err, id) => {
   // ...
 });
 ```
@@ -275,11 +273,11 @@ dockWorker.startContainer({
 To get information on running containers for a specific image, use the `getRunningContainersFor` function and provide the image name.
 
 ```javascript
-dockWorker.getRunningContainersFor({ name: 'my-image' }, function (err, containers) {
+dockWorker.getRunningContainersFor({ name: 'node' }, (err, containers) => {
   console.log(containers);
   // => [
   //      {
-  //        image: 'my-image',
+  //        image: 'node',
   //        name: 'my-container',
   //        ports: [
   //          { container: 3000, host: 3000 }
@@ -303,11 +301,18 @@ dockWorker.getRunningContainersFor({ name: 'my-image' }, function (err, containe
 });
 ```
 
-Alternatively you may specify the image name by a regular expression.
-The options can also contain tags in the form of `{ name: 'imagename', tag: 'tag' }`.
+Again, you may also specify an image tag.
 
 ```javascript
-dockWorker.getRunningContainersFor(/^my/, function (err, containers) {
+dockWorker.getRunningContainersFor({ name: 'node', tag: '4.0' }, (err, containers) => {
+  // ...
+});
+```
+
+Alternatively you may specify the image name by a regular expression.
+
+```javascript
+dockWorker.getRunningContainersFor(/^no/, (err, containers) => {
   // ...
 });
 ```
@@ -317,7 +322,7 @@ dockWorker.getRunningContainersFor(/^my/, function (err, containers) {
 To get the logs of a running container, call the `getLogs` function and provide the name of the container.
 
 ```javascript
-dockWorker.getLogs('myContainer', function (err, stdOut, stdErr) {
+dockWorker.getLogs('myContainer', (err, stdOut, stdErr) => {
   // ...
 });
 ```
@@ -327,7 +332,7 @@ dockWorker.getLogs('myContainer', function (err, stdOut, stdErr) {
 To stop and automatically remove a running container, call the `stopContainer` function and provide the name of the container.
 
 ```javascript
-dockWorker.stopContainer('myContainer', function (err) {
+dockWorker.stopContainer('myContainer', err => {
   // ...
 });
 ```
@@ -342,14 +347,14 @@ Before running the test, you need to build the `thenativeweb/crew-test` image. I
 
     $ grunt build
 
-If you're using Docker Machine, make sure to copy the crew source folder to your Docker Machine before running the tests. Assuming your Docker machine name is `default` and you're in the `crew` source folder on your local machine, the commands would look like this:
+If you're using Docker Machine, make sure to copy the crew source folder to your Docker Machine before running the tests. Assuming your Docker machine name is `dev` and you're in the `crew` source folder on your local machine run the following commands.
 
 ```bash
-docker-machine ssh default -- mkdir -p $(pwd)
-docker-machine scp -r . default:$(pwd)
+docker-machine ssh dev -- mkdir -p $(pwd)
+docker-machine scp -r . dev:$(pwd)
 ```
 
-After this, you can run the tests using `grunt` or `grunt test`.
+After this, you can run the tests as described above.
 
 ## License
 
