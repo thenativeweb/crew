@@ -18,11 +18,11 @@
   ],
   "main": "lib/crew.js",
   "dependencies": {
-    "del": "2.0.2",
-    "dockerode": "2.2.2",
+    "dockerode": "2.2.3",
     "fs-extra": "0.24.0",
     "isolated": "0.3.0",
     "lodash": "3.10.1",
+    "minimatch": "3.0.0",
     "q": "1.4.1",
     "tar-fs": "1.8.1"
   },
@@ -30,7 +30,7 @@
     "assertthat": "0.6.0",
     "grunt": "0.4.5",
     "knockat": "0.2.1",
-    "request": "2.62.0",
+    "request": "2.64.0",
     "tourism": "0.21.0",
     "uuidv4": "0.3.1"
   },
