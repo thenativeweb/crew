@@ -21,7 +21,7 @@
     "dockerode": "2.2.3",
     "fs-extra": "0.24.0",
     "isolated": "0.3.0",
-    "lodash": "3.10.1",
+    "lodash": "4.17.21",
     "minimatch": "3.0.0",
     "q": "1.4.1",
     "tar-fs": "1.8.1"
